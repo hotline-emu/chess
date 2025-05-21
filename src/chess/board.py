@@ -7,7 +7,7 @@ from chess.pieces import PieceFactory
 
 class Board:
     def __init__(self) -> None:
-        self.tile_size = 80
+        self.tile_size = env.int("tile_size")
         self.grid = self.create_initial_board()
         self.font = pygame.font.SysFont(
             env.str("font"),
