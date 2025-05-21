@@ -1,7 +1,7 @@
 class Piece:
     def __init__(self, color: str, kind: str) -> None:
-        self.color = color  # 'white' or 'black'
-        self.kind = kind  # 'p', 'r', 'n', etc.
+        self.color = color
+        self.kind = kind
 
 
 class PieceFactory:

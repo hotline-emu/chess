@@ -16,20 +16,20 @@ class Board:
 
         self.unicode_map = {
             "white": {
-                "k": "\u2654",
-                "q": "\u2655",
-                "r": "\u2656",
-                "b": "\u2657",
-                "n": "\u2658",
-                "p": "\u2659",
+                "king": "\u2654",
+                "queen": "\u2655",
+                "rook": "\u2656",
+                "bishop": "\u2657",
+                "knight": "\u2658",
+                "pawn": "\u2659",
             },
             "black": {
-                "k": "\u265a",
-                "q": "\u265b",
-                "r": "\u265c",
-                "b": "\u265d",
-                "n": "\u265e",
-                "p": "\u265f",
+                "king": "\u265a",
+                "queen": "\u265b",
+                "rook": "\u265c",
+                "bishop": "\u265d",
+                "knight": "\u265e",
+                "pawn": "\u265f",
             },
         }
 
@@ -59,9 +59,30 @@ class Board:
     def create_initial_board(self) -> list[list[Any]]:
         board = [[None for _ in range(8)] for _ in range(8)]
         for i in range(8):
-            board[1][i] = PieceFactory.create("p", "black")
-            board[6][i] = PieceFactory.create("p", "white")
-        # TODO: Add other pieces
+            board[1][i] = PieceFactory.create("pawn", "black")
+            board[6][i] = PieceFactory.create("pawn", "white")
+
+        board[0][0] = PieceFactory.create("rook", "black")
+        board[7][0] = PieceFactory.create("rook", "white")
+        board[0][7] = PieceFactory.create("rook", "black")
+        board[7][7] = PieceFactory.create("rook", "white")
+
+        board[0][1] = PieceFactory.create("knight", "black")
+        board[7][1] = PieceFactory.create("knight", "white")
+        board[0][6] = PieceFactory.create("knight", "black")
+        board[7][6] = PieceFactory.create("knight", "white")
+
+        board[0][2] = PieceFactory.create("bishop", "black")
+        board[7][2] = PieceFactory.create("bishop", "white")
+        board[0][5] = PieceFactory.create("bishop", "black")
+        board[7][5] = PieceFactory.create("bishop", "white")
+
+        board[0][3] = PieceFactory.create("queen", "black")
+        board[7][4] = PieceFactory.create("queen", "white")
+
+        board[0][4] = PieceFactory.create("king", "black")
+        board[7][3] = PieceFactory.create("king", "white")
+
         return board
 
     def get_piece(self, pos: tuple[int, int]) -> list[list[Any]]:
