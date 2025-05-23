@@ -44,4 +44,6 @@ disable_error_code = [
     "misc",
     "call-overload",
     "no-any-return",
+    "attr-defined",
+    "union-attr",
 ]

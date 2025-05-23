@@ -2,7 +2,7 @@ from typing import Any
 import pygame
 from environs import env
 from pygame import Surface
-from chess.pieces import PieceFactory
+from chess.components import PieceFactory
 
 
 class Board:

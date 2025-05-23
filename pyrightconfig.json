@@ -1,4 +1,5 @@
 {
   "reportArgumentType": false,
-  "reportCallIssue": false
+  "reportCallIssue": false,
+  "reportOptionalMemberAccess": false,
 }

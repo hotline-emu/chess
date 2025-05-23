@@ -1,13 +1,13 @@
 import pygame
 from pygame import Surface
 from pygame.event import Event
-from chess.board import Board
+from chess.components import Board
 
 
-class ChessGame:
-    def __init__(self, screen: Surface) -> None:
+class GameEngine:
+    def __init__(self, display: Surface) -> None:
         self.board = Board()
-        self.screen = screen
+        self.display = display
         self.selected: tuple[int, int] | None = None
 
     def handle_event(self, event: Event) -> None:
@@ -26,4 +26,4 @@ class ChessGame:
         pass  # Could later be used for animations or turn logic
 
     def draw(self) -> None:
-        self.board.draw(self.screen, self.selected)
+        self.board.draw(self.display, self.selected)
