@@ -26,11 +26,12 @@ class Board:
         self.dark_square_color = (119, 148, 85)
         self.selected_border_color = (255, 0, 0)
         self.black = (0, 0, 0)
+        self.row_and_column_count = 8
 
     def draw(self, surface: Surface, selected: tuple[int, int] | None) -> None:
         colors = [self.light_square_color, self.dark_square_color]
-        for row in range(8):
-            for col in range(8):
+        for row in range(self.row_and_column_count):
+            for col in range(self.row_and_column_count):
                 color = colors[(row + col) % 2]
                 rect = pygame.Rect(
                     col * self.tile_size,
@@ -70,8 +71,11 @@ class Board:
         black = AbstractPiece.BLACK
         white = AbstractPiece.WHITE
 
-        board = [[None for _ in range(8)] for _ in range(8)]
-        for i in range(8):
+        board = [
+            [None for _ in range(self.row_and_column_count)]
+            for _ in range(self.row_and_column_count)
+        ]
+        for i in range(self.row_and_column_count):
             board[1][i] = PieceFactory.create(Pawn.lookup_name, black)
             board[6][i] = PieceFactory.create(Pawn.lookup_name, white)
 
