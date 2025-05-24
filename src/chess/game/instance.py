@@ -1,10 +1,10 @@
 from typing import Any
 import pygame
 from pygame import Surface
-from chess.game_engine import GameEngine
+from chess.game.engine import Engine
 
 
-class GameInstance:
+class Instance:
     """Exists to be used as a disposable. Debatable if worth the effort."""
 
     def __init__(self, config: dict[str, Any]):
@@ -12,16 +12,16 @@ class GameInstance:
         self.scale_multiplier: int = config.get("scale_multiplier", 8)
         self.framerate: int = config.get("framerate", 60)
 
-        self.game: GameEngine | None = None
+        self.game: Engine | None = None
         self.clock = pygame.time.Clock()
         self.is_running = False
 
-    def __enter__(self) -> "GameInstance":
+    def __enter__(self) -> "Instance":
         pygame.init()
 
         board_length = self.tile_size * self.scale_multiplier
         display: Surface = pygame.display.set_mode((board_length, board_length))
-        self.game = GameEngine(display)
+        self.game = Engine(display)
         self.is_running = True
 
         return self

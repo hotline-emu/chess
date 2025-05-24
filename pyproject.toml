@@ -17,6 +17,7 @@ pylint = "^3.3.7"
 mypy = "^1.15.0"
 flake8 = "^7.2.0"
 pytest = "^8.3.5"
+debugpy = "^1.8.14"
 
 [build-system]
 requires = ["poetry-core"]
@@ -46,4 +47,6 @@ disable_error_code = [
     "no-any-return",
     "attr-defined",
     "union-attr",
+    "import-untyped",
+    "no-any-unimported",
 ]

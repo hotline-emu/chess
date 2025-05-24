@@ -1,5 +1,5 @@
 from environs import Env
-from .game_instance import GameInstance
+from chess.game.instance import Instance
 
 if __name__ == "__main__":
     env = Env()
@@ -10,5 +10,5 @@ if __name__ == "__main__":
         "scale_multiplier": env.int("scale_multiplier"),
     }
 
-    with GameInstance(config) as instance:
+    with Instance(config) as instance:
         instance.run()

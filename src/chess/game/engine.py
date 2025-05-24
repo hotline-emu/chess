@@ -4,7 +4,7 @@ from pygame.event import Event
 from chess.components import Board
 
 
-class GameEngine:
+class Engine:
     def __init__(self, display: Surface) -> None:
         self.board = Board()
         self.display = display
