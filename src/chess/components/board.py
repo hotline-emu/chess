@@ -89,9 +89,17 @@ class Board:
             [None for _ in range(self.row_and_column_count)]
             for _ in range(self.row_and_column_count)
         ]
-        for i in range(self.row_and_column_count):
-            board[1][i] = PieceFactory.create(Pawn.lookup_name, black)
-            board[6][i] = PieceFactory.create(Pawn.lookup_name, white)
+        for column_index in range(self.row_and_column_count):
+            black_pawn_row = 1
+            white_pawn_row = 6
+            board[black_pawn_row][column_index] = PieceFactory.create(
+                Pawn.lookup_name,
+                black,
+            )
+            board[white_pawn_row][column_index] = PieceFactory.create(
+                Pawn.lookup_name,
+                white,
+            )
 
         board[0][0] = PieceFactory.create(Rook.lookup_name, black)
         board[7][0] = PieceFactory.create(Rook.lookup_name, white)
