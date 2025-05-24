@@ -1,11 +1,11 @@
-name: flake8
+name: pylint
 
 on:
   pull_request:
   workflow_dispatch:
 
 jobs:
-  flake8:
+  pylint:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +25,5 @@ jobs:
       - name: Install dependencies with Poetry
         run: poetry install
 
-      - name: Run flake8 via Poetry
-        run: poetry run flake8 .
+      - name: Run pylint via Poetry
+        run: poetry run pylint .
