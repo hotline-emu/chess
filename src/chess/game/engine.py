@@ -22,8 +22,7 @@ class Engine:
             elif self.board.get_piece((row, col)):
                 self.selected_piece = (row, col)
 
-    def update(self) -> None:
-        pass  # Could later be used for animations or turn logic
+    def update(self) -> None: ...  # Reserved for turn logic IFF necessary.
 
     def draw(self) -> None:
         self.board.draw(self.display, self.selected_piece)
