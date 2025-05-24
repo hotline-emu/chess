@@ -3,7 +3,15 @@ import pygame
 from environs import env
 from pygame import Surface
 from chess.components import PieceFactory
-from chess.components.pieces import AbstractPiece
+from chess.components.pieces import (
+    AbstractPiece,
+    Bishop,
+    King,
+    Knight,
+    Pawn,
+    Queen,
+    Rook,
+)
 
 
 class Board:
@@ -61,29 +69,29 @@ class Board:
     def create_initial_board(self) -> list[list[Any]]:
         board = [[None for _ in range(8)] for _ in range(8)]
         for i in range(8):
-            board[1][i] = PieceFactory.create("pawn", "black")
-            board[6][i] = PieceFactory.create("pawn", "white")
+            board[1][i] = PieceFactory.create(Pawn.lookup_name, AbstractPiece.BLACK)
+            board[6][i] = PieceFactory.create(Pawn.lookup_name, AbstractPiece.WHITE)
 
-        board[0][0] = PieceFactory.create("rook", "black")
-        board[7][0] = PieceFactory.create("rook", "white")
-        board[0][7] = PieceFactory.create("rook", "black")
-        board[7][7] = PieceFactory.create("rook", "white")
+        board[0][0] = PieceFactory.create(Rook.lookup_name, AbstractPiece.BLACK)
+        board[7][0] = PieceFactory.create(Rook.lookup_name, AbstractPiece.WHITE)
+        board[0][7] = PieceFactory.create(Rook.lookup_name, AbstractPiece.BLACK)
+        board[7][7] = PieceFactory.create(Rook.lookup_name, AbstractPiece.WHITE)
 
-        board[0][1] = PieceFactory.create("knight", "black")
-        board[7][1] = PieceFactory.create("knight", "white")
-        board[0][6] = PieceFactory.create("knight", "black")
-        board[7][6] = PieceFactory.create("knight", "white")
+        board[0][1] = PieceFactory.create(Knight.lookup_name, AbstractPiece.BLACK)
+        board[7][1] = PieceFactory.create(Knight.lookup_name, AbstractPiece.WHITE)
+        board[0][6] = PieceFactory.create(Knight.lookup_name, AbstractPiece.BLACK)
+        board[7][6] = PieceFactory.create(Knight.lookup_name, AbstractPiece.WHITE)
 
-        board[0][2] = PieceFactory.create("bishop", "black")
-        board[7][2] = PieceFactory.create("bishop", "white")
-        board[0][5] = PieceFactory.create("bishop", "black")
-        board[7][5] = PieceFactory.create("bishop", "white")
+        board[0][2] = PieceFactory.create(Bishop.lookup_name, AbstractPiece.BLACK)
+        board[7][2] = PieceFactory.create(Bishop.lookup_name, AbstractPiece.WHITE)
+        board[0][5] = PieceFactory.create(Bishop.lookup_name, AbstractPiece.BLACK)
+        board[7][5] = PieceFactory.create(Bishop.lookup_name, AbstractPiece.WHITE)
 
-        board[0][3] = PieceFactory.create("queen", "black")
-        board[7][4] = PieceFactory.create("queen", "white")
+        board[0][3] = PieceFactory.create(Queen.lookup_name, AbstractPiece.BLACK)
+        board[7][4] = PieceFactory.create(Queen.lookup_name, AbstractPiece.WHITE)
 
-        board[0][4] = PieceFactory.create("king", "black")
-        board[7][3] = PieceFactory.create("king", "white")
+        board[0][4] = PieceFactory.create(King.lookup_name, AbstractPiece.BLACK)
+        board[7][3] = PieceFactory.create(King.lookup_name, AbstractPiece.WHITE)
 
         return board
 
