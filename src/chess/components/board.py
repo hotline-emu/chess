@@ -70,32 +70,46 @@ class Board:
         self.__draw_labels(surface)
 
     def __draw_labels(self, screen):
-        label_padding = 20  # used for both left and bottom padding
+        label_padding = 15
         label_font = pygame.font.SysFont("Arial", 16)
+        antialias = True
+        font_color = (0, 0, 0)
 
         # Draw numbers 8 to 1 (ranks) on the left side
         for rank in range(self.rank_and_file_count):
-            label = label_font.render(str(8 - rank), True, (0, 0, 0))
-            screen.blit(
-                label,
-                (
-                    label_padding // 2 - label.get_width() // 2,
-                    rank * self.tile_size + self.tile_size // 2 - label.get_height() // 2,
-                ),
+            label_text = str(8 - rank)
+            label = label_font.render(
+                label_text,
+                antialias,
+                font_color,
             )
+
+            x_coordinate = label_padding // 2 - label.get_width() // 2
+            y_coordinate = (
+                rank * self.tile_size + self.tile_size // 2 - label.get_height() // 2
+            )
+            destination = (x_coordinate, y_coordinate)
+            screen.blit(label, destination)
 
         # Draw letters a to h (files) at the bottom
         for file in range(self.rank_and_file_count):
-            label = label_font.render(chr(ord("a") + file), True, (0, 0, 0))
-            x = (
+            label_text = chr(ord("a") + file)
+            label = label_font.render(
+                label_text,
+                antialias,
+                font_color,
+            )
+            x_coordinate = (
                 file * self.tile_size
                 + label_padding
                 + self.tile_size // 2
                 - label.get_width() // 2
-            )
-            y = self.rank_and_file_count * self.tile_size  # bottom of the board
-            screen.blit(label, (x, y + 5))  # 5 pixels below the last row
-
+            ) - 15
+            y_coordinate = (
+                self.rank_and_file_count * self.tile_size
+            ) - 20
+            destination = (x_coordinate, y_coordinate)
+            screen.blit(label, destination)
 
     def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
         rank, file = position
