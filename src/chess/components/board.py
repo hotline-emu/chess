@@ -31,10 +31,10 @@ class Board:
     def draw(self, surface: Surface, selected: tuple[int, int] | None) -> None:
         colors = [self.light_square_color, self.dark_square_color]
         for rank in range(self.rank_and_file_count):
-            for col in range(self.rank_and_file_count):
-                color = colors[(rank + col) % 2]
+            for file in range(self.rank_and_file_count):
+                color = colors[(rank + file) % 2]
                 rect = pygame.Rect(
-                    col * self.tile_size,
+                    file * self.tile_size,
                     rank * self.tile_size,
                     self.tile_size,
                     self.tile_size,
@@ -45,7 +45,7 @@ class Board:
                     rect=rect,
                 )
 
-                if selected == (rank, col):
+                if selected == (rank, file):
                     pygame.draw.rect(
                         surface=surface,
                         color=self.selected_border_color,
@@ -53,7 +53,7 @@ class Board:
                         width=3,
                     )
 
-                piece: AbstractPiece = self.grid[rank][col]
+                piece: AbstractPiece = self.grid[rank][file]
                 if piece:
                     symbol = piece.get_symbol()
                     text_surface = self.font.render(  # Takes no keyword style args. Never seen that before.
