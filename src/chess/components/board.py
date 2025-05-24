@@ -85,10 +85,12 @@ class Board:
         black = AbstractPiece.BLACK
         white = AbstractPiece.WHITE
 
-        board = [
+        board = [  # Initialize everything to None.
             [None for _ in range(self.row_and_column_count)]
             for _ in range(self.row_and_column_count)
         ]
+
+        # Initialize the pawn rows.
         for column_index in range(self.row_and_column_count):
             black_pawn_row = 1
             white_pawn_row = 6
@@ -101,6 +103,7 @@ class Board:
                 white,
             )
 
+        # Initialize the rest of the pieces below.
         board[0][0] = PieceFactory.create(Rook.lookup_name, black)
         board[7][0] = PieceFactory.create(Rook.lookup_name, white)
         board[0][7] = PieceFactory.create(Rook.lookup_name, black)
