@@ -75,11 +75,11 @@ class Board:
         self,
         from_position: tuple[int, int],
         to_position: tuple[int, int],
-    ) -> None:  #! TODO : X and Y are programattically flipped.
-        fx, fy = from_position
-        tx, ty = to_position
-        self.grid[tx][ty] = self.grid[fx][fy]
-        self.grid[fx][fy] = None
+    ) -> None:
+        from_row, from_column = from_position
+        to_row, to_column = to_position
+        self.grid[to_row][to_column] = self.grid[from_row][from_column]
+        self.grid[from_row][from_column] = None
 
     def __create_initial_board(self) -> list[list[Any]]:
         black = AbstractPiece.BLACK
