@@ -28,4 +28,4 @@ class PieceFactory:
 
         # Lint disabled for the below line because MyPy will never believe that abstract properties are defined
         # with respect to the return type being the "abstraction" and not a long list of concrete objects.
-        return piece_class(color, kind)  # type: ignore[abstract]
+        return piece_class(color)  # type: ignore[abstract]

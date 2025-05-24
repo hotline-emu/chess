@@ -15,9 +15,8 @@ class AbstractPiece(ABC):
     def unicode_map(self) -> dict[str, str]:
         raise NotImplementedError()
 
-    def __init__(self, color: str, kind: str) -> None:
+    def __init__(self, color: str) -> None:
         self.color = color
-        self.kind = kind
 
     def get_symbol(self) -> str:
         return str(self.unicode_map.get(self.color))
