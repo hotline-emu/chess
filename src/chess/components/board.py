@@ -67,6 +67,39 @@ class Board:
                         dest=text_rect,
                     )
 
+        self.__draw_labels(surface)
+
+    def __draw_labels(self, screen):
+        label_padding = 20
+
+        # Use a smaller font just for labels
+        label_font = pygame.font.SysFont("Arial", 16)
+
+        # Draw numbers 8 to 1 (ranks) on the left side
+        for rank in range(self.rank_and_file_count):
+            label = label_font.render(str(8 - rank), True, (0, 0, 0))
+            screen.blit(
+                label,
+                (
+                    label_padding // 2 - label.get_width() // 2,
+                    rank * self.tile_size
+                    + self.tile_size // 2
+                    - label.get_height() // 2,
+                ),
+            )
+
+        # Draw letters a to h (files) at the bottom
+        for file in range(self.rank_and_file_count):
+            label = label_font.render(chr(ord("a") + file), True, (0, 0, 0))
+            x = (
+                file * self.tile_size
+                + label_padding
+                + self.tile_size // 2
+                - label.get_width() // 2
+            )
+            y = self.rank_and_file_count * self.tile_size
+            screen.blit(label, (x, y + 5))
+
     def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
         rank, file = position
         return self.grid[rank][file]
