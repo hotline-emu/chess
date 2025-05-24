@@ -1,8 +1,8 @@
+from unittest.mock import patch
 import pytest
 import pygame
 from chess.components import Board
 from chess.components.pieces import Rook, Pawn
-from unittest.mock import patch
 
 
 @pytest.mark.usefixtures("init_pygame")
