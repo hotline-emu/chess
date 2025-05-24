@@ -5,7 +5,7 @@ from chess.game.engine import Engine
 
 
 @pytest.fixture
-def engine():
+def engine() -> Engine:
     row_and_column_count = 8
     board_length = row_and_column_count
     surface = pygame.display.set_mode((board_length, board_length))
@@ -14,12 +14,12 @@ def engine():
 
 
 @pytest.mark.usefixtures("init_pygame")
-def test_init(engine) -> None:
+def test_init(engine: Engine) -> None:
     assert engine.selected_piece is None
 
 
 @pytest.mark.usefixtures("init_pygame")
-def test_handle_event_select_piece(engine):
+def test_handle_event_select_piece(engine: Engine) -> None:
     column_mouse_position = 2
     row_mouse_position = 1
 
@@ -37,7 +37,7 @@ def test_handle_event_select_piece(engine):
 
 
 @pytest.mark.usefixtures("init_pygame")
-def test_handle_event_move_piece(engine):
+def test_handle_event_move_piece(engine: Engine) -> None:
     column_mouse_position = 3
     row_mouse_position = 3
     target_position = (row_mouse_position, column_mouse_position)
@@ -63,7 +63,7 @@ def test_handle_event_move_piece(engine):
 
 
 @pytest.mark.usefixtures("init_pygame")
-def test_draw(engine):
+def test_draw(engine: Engine) -> None:
     with patch.object(engine.board, "draw") as patched_draw:
         selected_row = 2
         selected_column = 3

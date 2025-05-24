@@ -1,3 +1,7 @@
+# MyPy will complain about get() from the config.
+# In the case of the test, the received variable is controlled by the test. Overzealous type checking is unnecessary.
+# mypy: disable-error-code=assignment
+
 from unittest.mock import patch, MagicMock
 import pytest
 import pygame
@@ -5,7 +9,7 @@ from chess.game.instance import Instance
 
 
 @pytest.fixture
-def test_config():
+def test_config() -> dict[str, int]:
     return {
         "tile_size": 64,
         "scale_multiplier": 10,
@@ -13,7 +17,7 @@ def test_config():
     }
 
 
-def test_disposable(test_config):
+def test_disposable(test_config: dict[str, int]) -> None:
     with patch("pygame.init") as patched_init:
         with patch("pygame.display.set_mode") as patched_set_mode:
             with patch(
@@ -23,8 +27,8 @@ def test_disposable(test_config):
                 patched_set_mode.return_value = display_mock
 
                 with Instance(test_config) as instance:
-                    tile_size = test_config.get("tile_size")
-                    scale_multiplier = test_config.get("scale_multiplier")
+                    tile_size: int = test_config.get("tile_size")
+                    scale_multiplier: int = test_config.get("scale_multiplier")
                     board_length = tile_size * scale_multiplier
                     size = (  # This is the asserted parameter name from the signature.
                         board_length,
@@ -38,14 +42,14 @@ def test_disposable(test_config):
                     assert instance.is_running is True
 
 
-def test_disposable_exits(test_config):
+def test_disposable_exits(test_config: dict[str, int]) -> None:
     with patch("pygame.quit") as patched_quit:
         instance = Instance(test_config)
         instance.__exit__(None, None, None)
         patched_quit.assert_called_once()
 
 
-def test_run_processes_events_and_calls_engine(test_config):
+def test_run_processes_events_and_calls_engine(test_config: dict[str, int]) -> None:
     with patch("pygame.display.set_mode", return_value=MagicMock()):
         with patch("pygame.event.get") as patched_event_get:
             with patch("pygame.display.flip") as patched_display_flip:
