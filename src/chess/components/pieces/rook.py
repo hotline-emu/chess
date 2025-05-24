@@ -9,6 +9,8 @@ class Rook(AbstractPiece):
     }
 
     def is_legal_move(self, start_pos, end_pos, board):
+        return True
+
         start_x, start_y = start_pos
         end_x, end_y = end_pos
 
