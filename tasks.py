@@ -40,3 +40,8 @@ def coverage(context: Context) -> None:
     context.run(
         "poetry run pytest --cov=src --cov-report=html --cov-report=term-missing"
     )
+
+
+@task
+def build(context: Context) -> None:
+    context.run("poetry run pyinstaller src/chess/main.py --name chess --onefile")

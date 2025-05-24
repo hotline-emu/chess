@@ -17,6 +17,7 @@ from chess.components.pieces import (
 class Board:
     def __init__(self) -> None:
         self.tile_size = env.int("tile_size")
+        self.row_and_column_count = 8
         self.grid = self.create_initial_board()
         self.font = pygame.font.SysFont(
             env.str("font"),
@@ -26,7 +27,6 @@ class Board:
         self.dark_square_color = (119, 148, 85)
         self.selected_border_color = (255, 0, 0)
         self.black = (0, 0, 0)
-        self.row_and_column_count = 8
 
     def draw(self, surface: Surface, selected: tuple[int, int] | None) -> None:
         colors = [self.light_square_color, self.dark_square_color]
