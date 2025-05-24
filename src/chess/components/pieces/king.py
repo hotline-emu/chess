@@ -7,3 +7,5 @@ class King(AbstractPiece):
         AbstractPiece.BLACK: "\u265a",
         AbstractPiece.WHITE: "\u2654",
     }
+
+    def is_legal_move(self, start_pos, end_pos, board): ...

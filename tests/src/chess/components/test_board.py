@@ -35,8 +35,8 @@ def test_move_piece() -> None:
 def test_draw() -> None:
     board = Board()
 
-    row_and_column_length = 8
-    board_length = row_and_column_length
+    rank_and_file_length = 8
+    board_length = rank_and_file_length
     surface = pygame.display.set_mode((board_length, board_length))
 
     first_black_pawn = (1, 0)
@@ -45,7 +45,7 @@ def test_draw() -> None:
     with patch("pygame.draw.rect") as patched_draw_rect:
         board.draw(surface, selected)
 
-        # 8 rows * 8 columns + Once to render a red border.
+        # 8 ranks * 8 files + Once to render a red border.
         assert patched_draw_rect.call_count == 65
 
         # Assert that the call to set the border color to board.select_color exists.

@@ -7,3 +7,5 @@ class Knight(AbstractPiece):
         AbstractPiece.BLACK: "\u265e",
         AbstractPiece.WHITE: "\u2658",
     }
+
+    def is_legal_move(self, start_pos, end_pos, board): ...

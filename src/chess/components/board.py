@@ -17,7 +17,7 @@ from chess.components.pieces import (
 class Board:
     def __init__(self) -> None:
         self.tile_size = env.int("tile_size")
-        self.row_and_column_count = 8
+        self.rank_and_file_count = 8
         self.grid = self.__create_initial_board()
         self.font = pygame.font.SysFont(
             env.str("font"),
@@ -30,12 +30,12 @@ class Board:
 
     def draw(self, surface: Surface, selected: tuple[int, int] | None) -> None:
         colors = [self.light_square_color, self.dark_square_color]
-        for row in range(self.row_and_column_count):
-            for col in range(self.row_and_column_count):
-                color = colors[(row + col) % 2]
+        for rank in range(self.rank_and_file_count):
+            for col in range(self.rank_and_file_count):
+                color = colors[(rank + col) % 2]
                 rect = pygame.Rect(
                     col * self.tile_size,
-                    row * self.tile_size,
+                    rank * self.tile_size,
                     self.tile_size,
                     self.tile_size,
                 )
@@ -45,7 +45,7 @@ class Board:
                     rect=rect,
                 )
 
-                if selected == (row, col):
+                if selected == (rank, col):
                     pygame.draw.rect(
                         surface=surface,
                         color=self.selected_border_color,
@@ -53,7 +53,7 @@ class Board:
                         width=3,
                     )
 
-                piece: AbstractPiece = self.grid[row][col]
+                piece: AbstractPiece = self.grid[rank][col]
                 if piece:
                     symbol = piece.get_symbol()
                     text_surface = self.font.render(  # Takes no keyword style args. Never seen that before.
@@ -68,37 +68,37 @@ class Board:
                     )
 
     def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
-        row, column = position
-        return self.grid[row][column]
+        rank, file = position
+        return self.grid[rank][file]
 
     def move_piece(
         self,
         from_position: tuple[int, int],
         to_position: tuple[int, int],
     ) -> None:
-        from_row, from_column = from_position
-        to_row, to_column = to_position
-        self.grid[to_row][to_column] = self.grid[from_row][from_column]
-        self.grid[from_row][from_column] = None
+        from_rank, from_file = from_position
+        to_rank, to_file = to_position
+        self.grid[to_rank][to_file] = self.grid[from_rank][from_file]
+        self.grid[from_rank][from_file] = None
 
     def __create_initial_board(self) -> list[list[Any]]:
         black = AbstractPiece.BLACK
         white = AbstractPiece.WHITE
 
         board = [  # Initialize everything to None.
-            [None for _ in range(self.row_and_column_count)]
-            for _ in range(self.row_and_column_count)
+            [None for _ in range(self.rank_and_file_count)]
+            for _ in range(self.rank_and_file_count)
         ]
 
-        # Initialize the pawn rows.
-        for column_index in range(self.row_and_column_count):
-            black_pawn_row = 1
-            white_pawn_row = 6
-            board[black_pawn_row][column_index] = PieceFactory.create(
+        # Initialize the pawn ranks.
+        for file_index in range(self.rank_and_file_count):
+            black_pawn_rank = 1
+            white_pawn_rank = 6
+            board[black_pawn_rank][file_index] = PieceFactory.create(
                 Pawn.lookup_name,
                 black,
             )
-            board[white_pawn_row][column_index] = PieceFactory.create(
+            board[white_pawn_rank][file_index] = PieceFactory.create(
                 Pawn.lookup_name,
                 white,
             )

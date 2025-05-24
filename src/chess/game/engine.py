@@ -2,27 +2,42 @@ import pygame
 from pygame import Surface
 from pygame.event import Event
 from chess.components import Board
+from chess.components.pieces import AbstractPiece
 
 
 class Engine:
     def __init__(self, display: Surface) -> None:
         self.board = Board()
         self.display = display
-        self.selected_piece: tuple[int, int] | None = None
+        self.selected_position: tuple[int, int] | None = None
 
     def handle_event(self, event: Event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
-            col = x // self.board.tile_size
-            row = y // self.board.tile_size
+            file = x // self.board.tile_size
+            rank = y // self.board.tile_size
+            target_position = (rank, file)
 
-            if self.selected_piece:
-                self.board.move_piece(self.selected_piece, (row, col))
-                self.selected_piece = None
-            elif self.board.get_piece((row, col)):
-                self.selected_piece = (row, col)
+            if self.selected_position:
+                piece: AbstractPiece = self.board.get_piece(self.selected_position)
+                if not piece.is_legal_move(
+                    self.selected_position, target_position, self.board
+                ):
+                    self.show_illegal_move_message(self.display, self.board.font)
+                    return  # Skip the move
+
+                self.board.move_piece(self.selected_position, target_position)
+                self.selected_position = None
+            elif self.board.get_piece(target_position):
+                self.selected_position = target_position
 
     def update(self) -> None: ...  # Reserved for turn logic IFF necessary.
 
     def draw(self) -> None:
-        self.board.draw(self.display, self.selected_piece)
+        self.board.draw(self.display, self.selected_position)
+
+    def show_illegal_move_message(self, screen, font):
+        text = font.render("Illegal Move!", True, (255, 0, 0))
+        screen.blit(text, (10, 10))
+        pygame.display.update()
+        pygame.time.wait(1000)  # Show message for 1 second
