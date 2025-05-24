@@ -18,7 +18,7 @@ class Board:
     def __init__(self) -> None:
         self.tile_size = env.int("tile_size")
         self.row_and_column_count = 8
-        self.grid = self.create_initial_board()
+        self.grid = self.__create_initial_board()
         self.font = pygame.font.SysFont(
             env.str("font"),
             env.int("font_size"),
@@ -67,7 +67,21 @@ class Board:
                         dest=text_rect,
                     )
 
-    def create_initial_board(self) -> list[list[Any]]:
+    def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
+        row, column = position
+        return self.grid[row][column]
+
+    def move_piece(
+        self,
+        from_position: tuple[int, int],
+        to_position: tuple[int, int],
+    ) -> None:  #! TODO : X and Y are programattically flipped.
+        fx, fy = from_position
+        tx, ty = to_position
+        self.grid[tx][ty] = self.grid[fx][fy]
+        self.grid[fx][fy] = None
+
+    def __create_initial_board(self) -> list[list[Any]]:
         black = AbstractPiece.BLACK
         white = AbstractPiece.WHITE
 
@@ -101,17 +115,3 @@ class Board:
         board[7][3] = PieceFactory.create(King.lookup_name, white)
 
         return board
-
-    def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
-        row, column = position
-        return self.grid[row][column]
-
-    def move_piece(
-        self,
-        from_position: tuple[int, int],
-        to_position: tuple[int, int],
-    ) -> None:
-        fx, fy = from_position
-        tx, ty = to_position
-        self.grid[tx][ty] = self.grid[fx][fy]
-        self.grid[fx][fy] = None
