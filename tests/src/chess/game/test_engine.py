@@ -20,42 +20,56 @@ def test_init(engine) -> None:
 
 @pytest.mark.usefixtures("init_pygame")
 def test_handle_event_select_piece(engine):
+    column_mouse_position = 2
+    row_mouse_position = 1
+
     with patch.object(engine.board, "get_piece", return_value="pawn"):
         with patch(
             "pygame.mouse.get_pos",
             return_value=(
-                engine.board.tile_size * 2 + 1,
-                engine.board.tile_size * 1 + 1,
+                engine.board.tile_size * column_mouse_position + 1,
+                engine.board.tile_size * row_mouse_position + 1,
             ),
         ):
             event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
             engine.handle_event(event)
-            assert engine.selected_piece == (1, 2)
+            assert engine.selected_piece == (row_mouse_position, column_mouse_position)
 
 
 @pytest.mark.usefixtures("init_pygame")
 def test_handle_event_move_piece(engine):
-    engine.selected_piece = (1, 2)
+    column_mouse_position = 3
+    row_mouse_position = 3
+    target_position = (row_mouse_position, column_mouse_position)
 
-    # Mock position to move to
-    new_pos = (3, 3)
+    origin_row_position = 1
+    origin_column_position = 2
+    origin_position = (origin_row_position, origin_column_position)
+
+    engine.selected_piece = (origin_row_position, origin_column_position)
+
     with patch(
         "pygame.mouse.get_pos",
         return_value=(
-            engine.board.tile_size * new_pos[1] + 1,
-            engine.board.tile_size * new_pos[0] + 1,
+            engine.board.tile_size * column_mouse_position + 1,
+            engine.board.tile_size * row_mouse_position + 1,
         ),
     ):
-        with patch.object(engine.board, "move_piece") as move_mock:
+        with patch.object(engine.board, "move_piece") as patched_move_piece:
             event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
             engine.handle_event(event)
-            move_mock.assert_called_once_with((1, 2), new_pos)
+            patched_move_piece.assert_called_once_with(origin_position, target_position)
             assert engine.selected_piece is None
 
 
 @pytest.mark.usefixtures("init_pygame")
 def test_draw(engine):
-    with patch.object(engine.board, "draw") as draw_mock:
-        engine.selected_piece = (2, 3)
+    with patch.object(engine.board, "draw") as patched_draw:
+        selected_row = 2
+        selected_column = 3
+        selected_position = (selected_row, selected_column)
+
+        engine.selected_piece = selected_position
         engine.draw()
-        draw_mock.assert_called_once_with(engine.display, (2, 3))
+
+        patched_draw.assert_called_once_with(engine.display, selected_position)
