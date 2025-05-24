@@ -70,9 +70,7 @@ class Board:
         self.__draw_labels(surface)
 
     def __draw_labels(self, screen):
-        label_padding = 20
-
-        # Use a smaller font just for labels
+        label_padding = 20  # used for both left and bottom padding
         label_font = pygame.font.SysFont("Arial", 16)
 
         # Draw numbers 8 to 1 (ranks) on the left side
@@ -82,9 +80,7 @@ class Board:
                 label,
                 (
                     label_padding // 2 - label.get_width() // 2,
-                    rank * self.tile_size
-                    + self.tile_size // 2
-                    - label.get_height() // 2,
+                    rank * self.tile_size + self.tile_size // 2 - label.get_height() // 2,
                 ),
             )
 
@@ -97,8 +93,9 @@ class Board:
                 + self.tile_size // 2
                 - label.get_width() // 2
             )
-            y = self.rank_and_file_count * self.tile_size
-            screen.blit(label, (x, y + 5))
+            y = self.rank_and_file_count * self.tile_size  # bottom of the board
+            screen.blit(label, (x, y + 5))  # 5 pixels below the last row
+
 
     def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
         rank, file = position
