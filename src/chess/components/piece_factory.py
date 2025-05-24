@@ -26,4 +26,6 @@ class PieceFactory:
         if piece_class is None:
             raise PieceNotFoundError(kind)
 
-        return piece_class(color, kind)
+        # Lint disabled for the below line because MyPy will never believe that abstract properties are defined
+        # with respect to the return type being the "abstraction" and not a long list of concrete objects.
+        return piece_class(color, kind)  # type: ignore[abstract]

@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Any, Type
 
 
 class AbstractPiece(ABC):
@@ -21,4 +20,4 @@ class AbstractPiece(ABC):
         self.kind = kind
 
     def get_symbol(self) -> str:
-        return self.unicode_map.get(self.color)
+        return str(self.unicode_map.get(self.color))
