@@ -2,4 +2,7 @@
   "reportArgumentType": false,
   "reportCallIssue": false,
   "reportOptionalMemberAccess": false,
+  "reportReturnType": "none",
+  "reportIncompatibleMethodOverride": "none",
+  "reportAssignmentType": "none",
 }

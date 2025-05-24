@@ -3,6 +3,7 @@ import pygame
 from environs import env
 from pygame import Surface
 from chess.components import PieceFactory
+from chess.components.pieces import AbstractPiece
 
 
 class Board:
@@ -13,25 +14,6 @@ class Board:
             env.str("font"),
             env.int("font_size"),
         )
-
-        self.unicode_map = {
-            "white": {
-                "king": "\u2654",
-                "queen": "\u2655",
-                "rook": "\u2656",
-                "bishop": "\u2657",
-                "knight": "\u2658",
-                "pawn": "\u2659",
-            },
-            "black": {
-                "king": "\u265a",
-                "queen": "\u265b",
-                "rook": "\u265c",
-                "bishop": "\u265d",
-                "knight": "\u265e",
-                "pawn": "\u265f",
-            },
-        }
 
     def draw(self, screen: Surface, selected: tuple[int, int] | None) -> None:
         colors = [(235, 235, 208), (119, 148, 85)]
@@ -49,9 +31,9 @@ class Board:
                 if selected == (row, col):
                     pygame.draw.rect(screen, (255, 0, 0), rect, 3)
 
-                piece = self.grid[row][col]
+                piece: AbstractPiece = self.grid[row][col]
                 if piece:
-                    symbol = self.unicode_map[piece.color][piece.kind]
+                    symbol = piece.get_symbol()
                     text_surface = self.font.render(symbol, True, (0, 0, 0))
                     text_rect = text_surface.get_rect(center=rect.center)
                     screen.blit(text_surface, text_rect)
