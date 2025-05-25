@@ -46,7 +46,9 @@ def test_the_problem(engine: Engine) -> None:
             rook_current_location,
             rook_destination_location,
         )
-        rook_current_location = rook_destination_location  #! TODO: Trigger board move.
+
+        #! TODO: Trigger board move.
+        rook_current_location = rook_destination_location
 
         rook_has_been_executed = __can_rook_be_executed(
             rook_current_location,

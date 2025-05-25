@@ -23,6 +23,7 @@ class Engine:
                 piece: AbstractPiece = self.board.get_piece(self.selected_position)
                 if not piece.is_legal_move(self.selected_position, target_position):
                     self.__show_illegal_move_message(self.display, self.board.font)
+                    self.selected_position = None
                     return  # Skip the move
 
                 self.board.move_piece(self.selected_position, target_position)

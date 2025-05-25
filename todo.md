@@ -22,5 +22,5 @@ The Problem
 
 ## REMAINDER
 
-- find out where the rook is moving and move them.
+- actually move the rook on the board.
 - find out of the bishop can execute the rook.
