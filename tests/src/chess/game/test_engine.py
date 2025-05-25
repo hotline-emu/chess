@@ -84,9 +84,13 @@ def test_draw(engine: Engine) -> None:
 @patch("pygame.display.update")
 @patch("pygame.time.wait")
 def test_handle_event_triggers_illegal_move_message(
-    mock_wait, mock_update, mock_get_pos, engine: Engine
+    mock_wait: MagicMock,
+    mock_update: MagicMock,
+    mock_get_pos: MagicMock,
+    engine: Engine,
 ) -> None:
     intended_target_position = (2, 2)
+    initial_position = (1, 1)
 
     # Simulates a click event.
     tile_size = engine.board.tile_size
@@ -99,11 +103,12 @@ def test_handle_event_triggers_illegal_move_message(
     mocked_piece.is_legal_move.return_value = False
 
     engine.board.get_piece = MagicMock(
-        side_effect=lambda pos: mocked_piece if pos == initial_position else None
+        side_effect=lambda position: (
+            mocked_piece if position == initial_position else None
+        )
     )
 
     # Force the engine to believe that a piece was selected already.
-    initial_position = (1, 1)
     engine.selected_position = initial_position
 
     # Trigger the event.
