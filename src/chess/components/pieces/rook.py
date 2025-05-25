@@ -20,4 +20,6 @@ class Rook(AbstractPiece):
             # Both cannot have changed.
             return False
 
+        # TODO, is blocked?
+
         return True
