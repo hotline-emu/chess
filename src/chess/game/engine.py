@@ -6,8 +6,8 @@ from chess.components.pieces import AbstractPiece
 
 
 class Engine:
-    def __init__(self, display: Surface) -> None:
-        self.board = Board()
+    def __init__(self, display: Surface, scenario=None) -> None:
+        self.board = Board(scenario)
         self.display = display
         self.selected_position: tuple[int, int] | None = None
 

@@ -11,8 +11,9 @@ class Instance:
         self.tile_size: int = config.get("tile_size", 80)
         self.scale_multiplier: int = config.get("scale_multiplier", 8)
         self.framerate: int = config.get("framerate", 60)
+        self.scenario: str | None = config.get("scenario", None)
 
-        self.game: Engine | None = None
+        self.engine: Engine | None = None
         self.clock = pygame.time.Clock()
         self.is_running = False
 
@@ -21,7 +22,7 @@ class Instance:
 
         board_length = self.tile_size * self.scale_multiplier
         display: Surface = pygame.display.set_mode((board_length, board_length))
-        self.game = Engine(display)
+        self.engine = Engine(display, self.scenario)
         self.is_running = True
 
         return self
@@ -33,10 +34,10 @@ class Instance:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_running = False
-                self.game.handle_event(event)
+                self.engine.handle_event(event)
 
-            self.game.update()
-            self.game.draw()
+            self.engine.update()
+            self.engine.draw()
             pygame.display.flip()
 
     def __exit__(

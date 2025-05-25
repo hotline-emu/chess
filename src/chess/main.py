@@ -8,6 +8,7 @@ if __name__ == "__main__":
         "tile_size": env.int("tile_size"),
         "framerate": env.int("framerate"),
         "scale_multiplier": env.int("scale_multiplier"),
+        "scenario": env.str("scenario", None),
     }
 
     with Instance(config) as instance:
