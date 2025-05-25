@@ -37,7 +37,7 @@ def test_disposable(test_config: dict[str, int]) -> None:
 
                     patched_init.assert_called_once()
                     patched_set_mode.assert_called_once_with(size)
-                    patched_engine.assert_called_once_with(display_mock)
+                    patched_engine.assert_called_once_with(display_mock, None)
                     assert instance.engine is patched_engine.return_value
                     assert instance.is_running is True
 
