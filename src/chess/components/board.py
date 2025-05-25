@@ -14,16 +14,51 @@ from chess.components.pieces import (
 )
 
 
+def problem_scenario():
+    black = AbstractPiece.BLACK
+    white = AbstractPiece.WHITE
+
+    grid = [  # Initialize everything to None.
+        [None for _ in range(8)] for _ in range(8)
+    ]
+
+    # Initialize the scenario pieces.
+    grid[2][5] = PieceFactory.create(Rook.lookup_name, black)
+    grid[5][2] = PieceFactory.create(Bishop.lookup_name, white)
+
+    return grid
+
+
+class ScenarioNotFoundError(Exception):
+    def __init__(self, scenario: str) -> None:
+        message = f"Scenario by name '{scenario}' has not been configured."
+        super().__init__(message)
+
+
+class ScenarioFactory:
+    SCENARIO_MAP = {
+        "the_problem": problem_scenario,
+    }
+
+    @staticmethod
+    def get(scenario: str):
+        scenario_callable = ScenarioFactory.SCENARIO_MAP.get(scenario)
+        if scenario_callable is None:
+            raise ScenarioNotFoundError(scenario)
+
+        return scenario_callable
+
+
 class Board:
-    def __init__(self, scenario_callable=None) -> None:
+    def __init__(self, scenario=None) -> None:
         self.tile_size = env.int("tile_size")
         self.rank_and_file_count = 8
 
-        self.grid = (
-            self.__create_initial_board()
-            if scenario_callable is None
-            else scenario_callable()
-        )
+        if scenario is None:
+            self.grid = self.__create_initial_board()
+        else:
+            scenario_callable = ScenarioFactory.get(scenario)
+            self.grid = scenario_callable()
 
         self.font = pygame.font.SysFont(
             env.str("font"),
