@@ -69,35 +69,6 @@ class Board:
 
         self.__draw_labels(surface)
 
-    def __draw_labels(self, screen):
-        label_font = pygame.font.SysFont("Arial", 16)
-        antialias = True
-        font_color = (0, 0, 0)
-
-        # Numeric labels on the leftmost column.
-        for rank in range(self.rank_and_file_count):
-            label_text = str(8 - rank)
-            label = label_font.render(label_text, antialias, font_color)
-
-            # Manipulated to be in the top left corner of the tile.
-            x_coordinate = 4
-            y_coordinate = rank * self.tile_size + 2
-
-            destination = (x_coordinate, y_coordinate)
-            screen.blit(label, destination)
-
-        # Alpha labels on the bottommost row.
-        for file in range(self.rank_and_file_count):
-            label_text = chr(ord("a") + file)
-            label = label_font.render(label_text, antialias, font_color)
-
-            # Manipulated to be in the bottom right corner of the tile.
-            x_coordinate = file * self.tile_size + 65
-            y_coordinate = self.rank_and_file_count * self.tile_size - 20
-
-            destination = (x_coordinate, y_coordinate)
-            screen.blit(label, destination)
-
     def get_piece(self, position: tuple[int, int]) -> list[list[Any]]:
         rank, file = position
         return self.grid[rank][file]
@@ -157,3 +128,32 @@ class Board:
         board[7][3] = PieceFactory.create(King.lookup_name, white)
 
         return board
+
+    def __draw_labels(self, screen):
+        label_font = pygame.font.SysFont("Arial", 16)
+        antialias = True
+        font_color = (0, 0, 0)
+
+        # Numeric labels on the leftmost column.
+        for rank in range(self.rank_and_file_count):
+            label_text = str(8 - rank)
+            label = label_font.render(label_text, antialias, font_color)
+
+            # Manipulated to be in the top left corner of the tile.
+            x_coordinate = 4
+            y_coordinate = rank * self.tile_size + 2
+
+            destination = (x_coordinate, y_coordinate)
+            screen.blit(label, destination)
+
+        # Alpha labels on the bottommost row.
+        for file in range(self.rank_and_file_count):
+            label_text = chr(ord("a") + file)
+            label = label_font.render(label_text, antialias, font_color)
+
+            # Manipulated to be in the bottom right corner of the tile.
+            x_coordinate = file * self.tile_size + 65
+            y_coordinate = self.rank_and_file_count * self.tile_size - 20
+
+            destination = (x_coordinate, y_coordinate)
+            screen.blit(label, destination)
