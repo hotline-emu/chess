@@ -45,3 +45,8 @@ def coverage(context: Context) -> None:
 @task
 def build(context: Context) -> None:
     context.run("poetry run pyinstaller src/chess/main.py --name chess --onefile")
+
+
+@task
+def integration(context: Context) -> None:
+    context.run("poetry run pytest tests/integration")

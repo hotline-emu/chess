@@ -26,6 +26,7 @@ mypy
 pylint
 run
 test
+integration
 ```
 
 This can be revealed via the command `invoke --list` from the CLI.
@@ -69,6 +70,9 @@ The code base can be tested via the following two commands:
 ```bash
 invoke test
 invoke coverage
+invoke integration
 ```
 
-They both do the same thing, with the caveat that coverage outputs a coverage report.
+`test` and `coverage` do the same thing, with the caveat that coverage outputs a coverage report.
+
+`integration` bypasses `pytest.ini` and informs pytest to look at `tests/integration` as opposed to `tests/unit`.
