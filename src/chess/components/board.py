@@ -15,10 +15,16 @@ from chess.components.pieces import (
 
 
 class Board:
-    def __init__(self) -> None:
+    def __init__(self, scenario_callable=None) -> None:
         self.tile_size = env.int("tile_size")
         self.rank_and_file_count = 8
-        self.grid = self.__create_initial_board()
+
+        self.grid = (
+            self.__create_initial_board()
+            if scenario_callable is None
+            else scenario_callable()
+        )
+
         self.font = pygame.font.SysFont(
             env.str("font"),
             env.int("font_size"),
@@ -87,7 +93,7 @@ class Board:
         black = AbstractPiece.BLACK
         white = AbstractPiece.WHITE
 
-        board = [  # Initialize everything to None.
+        grid = [  # Initialize everything to None.
             [None for _ in range(self.rank_and_file_count)]
             for _ in range(self.rank_and_file_count)
         ]
@@ -96,38 +102,38 @@ class Board:
         for file_index in range(self.rank_and_file_count):
             black_pawn_rank = 1
             white_pawn_rank = 6
-            board[black_pawn_rank][file_index] = PieceFactory.create(
+            grid[black_pawn_rank][file_index] = PieceFactory.create(
                 Pawn.lookup_name,
                 black,
             )
-            board[white_pawn_rank][file_index] = PieceFactory.create(
+            grid[white_pawn_rank][file_index] = PieceFactory.create(
                 Pawn.lookup_name,
                 white,
             )
 
         # Initialize the rest of the pieces below.
-        board[0][0] = PieceFactory.create(Rook.lookup_name, black)
-        board[7][0] = PieceFactory.create(Rook.lookup_name, white)
-        board[0][7] = PieceFactory.create(Rook.lookup_name, black)
-        board[7][7] = PieceFactory.create(Rook.lookup_name, white)
+        grid[0][0] = PieceFactory.create(Rook.lookup_name, black)
+        grid[7][0] = PieceFactory.create(Rook.lookup_name, white)
+        grid[0][7] = PieceFactory.create(Rook.lookup_name, black)
+        grid[7][7] = PieceFactory.create(Rook.lookup_name, white)
 
-        board[0][1] = PieceFactory.create(Knight.lookup_name, black)
-        board[7][1] = PieceFactory.create(Knight.lookup_name, white)
-        board[0][6] = PieceFactory.create(Knight.lookup_name, black)
-        board[7][6] = PieceFactory.create(Knight.lookup_name, white)
+        grid[0][1] = PieceFactory.create(Knight.lookup_name, black)
+        grid[7][1] = PieceFactory.create(Knight.lookup_name, white)
+        grid[0][6] = PieceFactory.create(Knight.lookup_name, black)
+        grid[7][6] = PieceFactory.create(Knight.lookup_name, white)
 
-        board[0][2] = PieceFactory.create(Bishop.lookup_name, black)
-        board[7][2] = PieceFactory.create(Bishop.lookup_name, white)
-        board[0][5] = PieceFactory.create(Bishop.lookup_name, black)
-        board[7][5] = PieceFactory.create(Bishop.lookup_name, white)
+        grid[0][2] = PieceFactory.create(Bishop.lookup_name, black)
+        grid[7][2] = PieceFactory.create(Bishop.lookup_name, white)
+        grid[0][5] = PieceFactory.create(Bishop.lookup_name, black)
+        grid[7][5] = PieceFactory.create(Bishop.lookup_name, white)
 
-        board[0][3] = PieceFactory.create(Queen.lookup_name, black)
-        board[7][4] = PieceFactory.create(Queen.lookup_name, white)
+        grid[0][3] = PieceFactory.create(Queen.lookup_name, black)
+        grid[7][4] = PieceFactory.create(Queen.lookup_name, white)
 
-        board[0][4] = PieceFactory.create(King.lookup_name, black)
-        board[7][3] = PieceFactory.create(King.lookup_name, white)
+        grid[0][4] = PieceFactory.create(King.lookup_name, black)
+        grid[7][3] = PieceFactory.create(King.lookup_name, white)
 
-        return board
+        return grid
 
     def __draw_labels(self, screen):
         label_font = pygame.font.SysFont("Arial", 16)
