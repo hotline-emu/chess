@@ -1,7 +1,8 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import pytest
 import pygame
 from chess.game.engine import Engine
+from chess.components.pieces import AbstractPiece
 
 
 @pytest.fixture
@@ -33,7 +34,10 @@ def test_handle_event_select_piece(engine: Engine) -> None:
         ):
             event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
             engine.handle_event(event)
-            assert engine.selected_position == (rank_mouse_position, file_mouse_position)
+            assert engine.selected_position == (
+                rank_mouse_position,
+                file_mouse_position,
+            )
 
 
 @pytest.mark.usefixtures("init_pygame")
@@ -73,3 +77,44 @@ def test_draw(engine: Engine) -> None:
         engine.draw()
 
         patched_draw.assert_called_once_with(engine.display, selected_position)
+
+
+@pytest.mark.usefixtures("init_pygame")
+@patch("pygame.mouse.get_pos")
+@patch("pygame.display.update")
+@patch("pygame.time.wait")
+def test_handle_event_triggers_illegal_move_message(
+    mock_wait, mock_update, mock_get_pos, engine: Engine
+) -> None:
+    intended_target_position = (2, 2)
+
+    # Simulates a click event.
+    tile_size = engine.board.tile_size
+    mock_get_pos.return_value = (
+        intended_target_position[1] * tile_size,
+        intended_target_position[0] * tile_size,
+    )
+
+    mocked_piece = MagicMock(spec=AbstractPiece)
+    mocked_piece.is_legal_move.return_value = False
+
+    engine.board.get_piece = MagicMock(
+        side_effect=lambda pos: mocked_piece if pos == initial_position else None
+    )
+
+    # Force the engine to believe that a piece was selected already.
+    initial_position = (1, 1)
+    engine.selected_position = initial_position
+
+    # Trigger the event.
+    event = pygame.event.Event(pygame.MOUSEBUTTONDOWN)
+    engine.handle_event(event)
+
+    mock_update.assert_called_once()
+    mock_wait.assert_called_once_with(1000)
+    mocked_piece.is_legal_move.assert_called_once_with(
+        initial_position, intended_target_position
+    )
+
+    # Ensure that the piece never moved.
+    assert engine.selected_position == initial_position

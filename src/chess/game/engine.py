@@ -22,7 +22,7 @@ class Engine:
             if self.selected_position:
                 piece: AbstractPiece = self.board.get_piece(self.selected_position)
                 if not piece.is_legal_move(self.selected_position, target_position):
-                    self.show_illegal_move_message(self.display, self.board.font)
+                    self.__show_illegal_move_message(self.display, self.board.font)
                     return  # Skip the move
 
                 self.board.move_piece(self.selected_position, target_position)
@@ -35,8 +35,9 @@ class Engine:
     def draw(self) -> None:
         self.board.draw(self.display, self.selected_position)
 
-    def show_illegal_move_message(self, surface: Surface, font: Font) -> None:
+    def __show_illegal_move_message(self, surface: Surface, font: Font) -> None:
         text = font.render("Illegal Move!", True, (255, 0, 0))
         surface.blit(text, (10, 10))
         pygame.display.update()
-        pygame.time.wait(1000)  # Show message for 1 second
+        one_second = 1000
+        pygame.time.wait(one_second)
