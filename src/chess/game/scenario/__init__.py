@@ -1,4 +1,4 @@
-from .scenario_factory import ScenarioFactory
+from chess.game.scenario.scenario_factory import ScenarioFactory
 
 __all__ = [
     "ScenarioFactory",

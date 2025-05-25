@@ -11,3 +11,13 @@ def test_rook() -> None:
     actual = rook.get_symbol()
 
     assert expected == actual
+
+
+def test_is_legal_move_return_true() -> None:
+    rook = Rook(AbstractPiece.BLACK)
+    assert rook.is_legal_move((0, 0), (1, 0)) is True
+
+
+def test_is_legal_move_return_false() -> None:
+    rook = Rook(AbstractPiece.BLACK)
+    assert rook.is_legal_move((0, 0), (1, 1)) is False

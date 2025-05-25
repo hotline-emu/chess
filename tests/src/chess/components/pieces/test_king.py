@@ -11,3 +11,8 @@ def test_king() -> None:
     actual = king.get_symbol()
 
     assert expected == actual
+
+
+def test_is_legal_move() -> None:
+    king = King(AbstractPiece.BLACK)
+    assert king.is_legal_move((0, 0), (0, 1)) is True

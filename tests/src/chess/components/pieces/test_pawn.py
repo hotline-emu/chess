@@ -11,3 +11,8 @@ def test_pawn() -> None:
     actual = pawn.get_symbol()
 
     assert expected == actual
+
+
+def test_is_legal_move() -> None:
+    pawn = Pawn(AbstractPiece.BLACK)
+    assert pawn.is_legal_move((0, 0), (0, 1)) is True

@@ -23,7 +23,7 @@ class Board:
         if scenario is None:
             self.grid = self.__create_initial_board()
         else:
-            scenario_callable = ScenarioFactory.get(scenario)
+            scenario_callable = ScenarioFactory.get(scenario=scenario)
             self.grid = scenario_callable()
 
         self.font = pygame.font.SysFont(

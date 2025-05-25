@@ -54,3 +54,18 @@ def test_draw() -> None:
             for call in patched_draw_rect.call_args_list
         )
         assert call_exists
+
+
+@pytest.mark.usefixtures("init_pygame")
+def test_draw_with_scenario() -> None:
+    with patch(
+        "chess.game.scenario.scenario_factory.ScenarioFactory.get"
+    ) as patched_scenario_get:
+        scenario = "the_problem"
+        Board(scenario=scenario)
+
+        call_args_list = patched_scenario_get.call_args_list
+        call_exists = any(
+            call.kwargs.get("scenario") == scenario for call in call_args_list
+        )
+        assert call_exists
