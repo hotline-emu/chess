@@ -15,7 +15,7 @@ def engine() -> Engine:
 
 
 @pytest.mark.usefixtures("init_pygame")
-def test_an_bishop_capture_rook(engine: Engine) -> None:
+def test_can_bishop_capture_rook(engine: Engine) -> None:
     # Bishop starts here.
     bishop_origin_rank_position = 5
     bishop_origin_file_position = 2
@@ -45,7 +45,7 @@ def test_an_bishop_capture_rook(engine: Engine) -> None:
 
 
 @pytest.mark.usefixtures("init_pygame")
-def test_an_rook_capture_bishop(engine: Engine) -> None:
+def test_can_rook_capture_bishop(engine: Engine) -> None:
     # Rook starts here.
     rook_origin_rank_position = 2
     rook_origin_file_position = 5

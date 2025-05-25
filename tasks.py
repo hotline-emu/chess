@@ -49,4 +49,9 @@ def build(context: Context) -> None:
 
 @task
 def integration(context: Context) -> None:
-    context.run("poetry run pytest tests/integration")
+    log_level = "INFO"
+    log_format = "%(levelname)s: %(message)s"
+    pytest_args = (
+        f'-o log_cli=true -o log_cli_level={log_level} -o log_cli_format="{log_format}"'
+    )
+    context.run(f"poetry run pytest {pytest_args} tests/integration")
