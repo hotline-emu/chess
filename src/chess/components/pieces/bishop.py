@@ -18,6 +18,7 @@ class Bishop(AbstractPiece):
         if move_is_not_diagonal:
             return False
 
-        # TODO, is blocked?
+        # TODO, Is blocked by friendly pieces OR enemery pieces prior to target destination.
+        # Note: Not implemented yet, because the scenario in question does not have additional friendlies.
 
         return True
