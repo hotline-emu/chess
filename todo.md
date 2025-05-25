@@ -6,10 +6,6 @@
 
 The Problem
 
-- TODO NEW SCENARIO "THE PROBLEM" -- Old problem becomes "the setup"
-- ROOK STARTS H1 - he moves each turn.
-- BISHOP STARTS C3 - he does not move.
-
 - We decide to move the rook.
 - Toss a coin
   - If heads -> rook moves up.

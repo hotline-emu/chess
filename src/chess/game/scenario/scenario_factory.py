@@ -1,10 +1,11 @@
 from typing import Callable, Any
-from chess.game.scenario.scenarios import problem_scenario
+from chess.game.scenario.scenarios import setup_scenario, problem_scenario
 from chess.exceptions import ScenarioNotFoundError
 
 
 class ScenarioFactory:
     SCENARIO_MAP = {
+        "the_setup": setup_scenario,
         "the_problem": problem_scenario,
     }
 

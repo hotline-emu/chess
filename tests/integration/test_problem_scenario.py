@@ -42,33 +42,3 @@ def test_an_bishop_capture_rook(engine: Engine) -> None:
             event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
             engine.handle_event(event)
             patched_show_illegal_move_message.assert_not_called()  # Because the move is legal.
-
-
-@pytest.mark.usefixtures("init_pygame")
-def test_an_rook_capture_bishop(engine: Engine) -> None:
-    # Rook starts here.
-    rook_origin_rank_position = 2
-    rook_origin_file_position = 5
-    engine.selected_position = (
-        rook_origin_rank_position,
-        rook_origin_file_position,
-    )
-
-    # Rook wants to go here.
-    bishop_rank_mouse_position = 5
-    bishop_file_mouse_position = 2
-
-    # Patch to simulate the mouse click.
-    with patch(
-        "pygame.mouse.get_pos",
-        return_value=(
-            engine.board.tile_size * bishop_file_mouse_position + 1,
-            engine.board.tile_size * bishop_rank_mouse_position + 1,
-        ),
-    ):
-        with patch.object(
-            engine, "_Engine__show_illegal_move_message"
-        ) as patched_show_illegal_move_message:
-            event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
-            engine.handle_event(event)
-            patched_show_illegal_move_message.assert_called_once()  # Because the move is illegal.

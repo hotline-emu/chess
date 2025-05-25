@@ -61,7 +61,7 @@ def test_draw_with_scenario() -> None:
     with patch(
         "chess.game.scenario.scenario_factory.ScenarioFactory.get"
     ) as patched_scenario_get:
-        scenario = "the_problem"
+        scenario = "the_setup"
         Board(scenario=scenario)
 
         call_args_list = patched_scenario_get.call_args_list
