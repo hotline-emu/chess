@@ -1,8 +1,9 @@
+from typing import Any
 from chess.components import PieceFactory
 from chess.components.pieces import AbstractPiece, Rook, Bishop
 
 
-def problem_scenario():
+def problem_scenario() -> list[list[Any]]:
     black = AbstractPiece.BLACK
     white = AbstractPiece.WHITE
 

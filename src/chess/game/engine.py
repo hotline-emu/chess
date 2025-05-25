@@ -1,12 +1,13 @@
 import pygame
 from pygame import Surface
+from pygame.font import Font
 from pygame.event import Event
 from chess.components import Board
 from chess.components.pieces import AbstractPiece
 
 
 class Engine:
-    def __init__(self, display: Surface, scenario=None) -> None:
+    def __init__(self, display: Surface, scenario: str | None = None) -> None:
         self.board = Board(scenario)
         self.display = display
         self.selected_position: tuple[int, int] | None = None
@@ -20,9 +21,7 @@ class Engine:
 
             if self.selected_position:
                 piece: AbstractPiece = self.board.get_piece(self.selected_position)
-                if not piece.is_legal_move(
-                    self.selected_position, target_position, self.board
-                ):
+                if not piece.is_legal_move(self.selected_position, target_position):
                     self.show_illegal_move_message(self.display, self.board.font)
                     return  # Skip the move
 
@@ -36,8 +35,8 @@ class Engine:
     def draw(self) -> None:
         self.board.draw(self.display, self.selected_position)
 
-    def show_illegal_move_message(self, screen, font):
+    def show_illegal_move_message(self, surface: Surface, font: Font) -> None:
         text = font.render("Illegal Move!", True, (255, 0, 0))
-        screen.blit(text, (10, 10))
+        surface.blit(text, (10, 10))
         pygame.display.update()
         pygame.time.wait(1000)  # Show message for 1 second

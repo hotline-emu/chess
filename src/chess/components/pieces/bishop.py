@@ -8,7 +8,11 @@ class Bishop(AbstractPiece):
         AbstractPiece.WHITE: "\u2657",
     }
 
-    def is_legal_move(self, initial_position, target_position, board):
+    def is_legal_move(
+        self,
+        initial_position: tuple[int, int],
+        target_position: tuple[int, int],
+    ) -> bool:
         initial_rank, initial_file = initial_position
         target_rank, target_file = target_position
 

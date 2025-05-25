@@ -22,5 +22,9 @@ class AbstractPiece(ABC):
         return str(self.unicode_map.get(self.color))
 
     @abstractmethod
-    def is_legal_move(self, start_pos, end_pos, board):
+    def is_legal_move(
+        self,
+        initial_position: tuple[int, int],
+        target_position: tuple[int, int],
+    ) -> bool:
         raise NotImplementedError()

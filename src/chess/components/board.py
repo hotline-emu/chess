@@ -16,7 +16,7 @@ from chess.game.scenario import ScenarioFactory
 
 
 class Board:
-    def __init__(self, scenario=None) -> None:
+    def __init__(self, scenario: str | None = None) -> None:
         self.tile_size = env.int("tile_size")
         self.rank_and_file_count = 8
 
@@ -136,7 +136,7 @@ class Board:
 
         return grid
 
-    def __draw_labels(self, screen):
+    def __draw_labels(self, surface: Surface) -> None:
         label_font = pygame.font.SysFont("Arial", 16)
         antialias = True
         font_color = (0, 0, 0)
@@ -151,7 +151,7 @@ class Board:
             y_coordinate = rank * self.tile_size + 2
 
             destination = (x_coordinate, y_coordinate)
-            screen.blit(label, destination)
+            surface.blit(label, destination)
 
         # Alpha labels on the bottommost row.
         for file in range(self.rank_and_file_count):
@@ -163,4 +163,4 @@ class Board:
             y_coordinate = self.rank_and_file_count * self.tile_size - 20
 
             destination = (x_coordinate, y_coordinate)
-            screen.blit(label, destination)
+            surface.blit(label, destination)

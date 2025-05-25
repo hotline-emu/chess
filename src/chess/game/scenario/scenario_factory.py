@@ -1,3 +1,4 @@
+from typing import Callable, Any
 from chess.game.scenario.scenarios import problem_scenario
 from chess.exceptions import ScenarioNotFoundError
 
@@ -8,7 +9,7 @@ class ScenarioFactory:
     }
 
     @staticmethod
-    def get(scenario: str):
+    def get(scenario: str) -> Callable[[], list[list[Any]]]:
         scenario_callable = ScenarioFactory.SCENARIO_MAP.get(scenario)
         if scenario_callable is None:
             raise ScenarioNotFoundError(scenario)

@@ -8,5 +8,9 @@ class Pawn(AbstractPiece):
         AbstractPiece.WHITE: "\u2659",
     }
 
-    def is_legal_move(self, start_pos, end_pos, board):
+    def is_legal_move(
+        self,
+        initial_position: tuple[int, int],
+        target_position: tuple[int, int],
+    ) -> bool:
         return True
