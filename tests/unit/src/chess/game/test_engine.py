@@ -121,5 +121,5 @@ def test_handle_event_triggers_illegal_move_message(
         initial_position, intended_target_position
     )
 
-    # Ensure that the piece never moved.
-    assert engine.selected_position == initial_position
+    # Ensure that the selected piece was deselected.
+    assert engine.selected_position == None
