@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Invoke - Run",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "chess.main",
+            "console": "internalConsole"
+        }
+    ]
+}
