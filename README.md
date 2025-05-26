@@ -1,4 +1,4 @@
-# zus-chess
+# Chess
 A chess POC in python
 
 ## Environment setup

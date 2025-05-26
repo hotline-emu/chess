@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "zus-chess"
+name = "chess"
 version = "0.0.1"
 description = "A chess POC in python"
 authors = ["James Galecki <james.galecki@gmail.com>"]
