@@ -1,0 +1,6 @@
+pylint:
+  stage: pylint
+  extends: .default_python_job
+  script:
+    - cp .env.example .env
+    - poetry run pylint .

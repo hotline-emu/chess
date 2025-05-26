@@ -1,0 +1,11 @@
+.default_python_job:
+  image: python:3.13
+  before_script:
+    - apt-get update && apt-get install -y curl
+    - curl -sSL https://install.python-poetry.org | python3 -
+    - export PATH="$HOME/.local/bin:$PATH"
+    - poetry config virtualenvs.create false
+    - poetry install
+  only:
+    - merge_requests
+    - main
