@@ -1,38 +1,54 @@
 import logging
 import pytest
 import pygame
-from chess.game.engine import Engine
+import time
+from chess.game.instance import Instance
 from tests.integration.utilities import Coin, Die
-from tests.integration.utilities.coin import HEADS, TAILS
+from tests.integration.utilities.coin import HEADS
+from environs import Env
+
+env = Env()
+env.read_env()
 
 logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
-def engine() -> Engine:
-    rank_and_file_count = 8
-    board_length = rank_and_file_count
-    surface = pygame.display.set_mode((board_length, board_length))
-    scenario = "the_problem"
+def instance():
+    config = {
+        "tile_size": env.int("tile_size"),
+        "framerate": env.int("framerate"),
+        "scale_multiplier": env.int("scale_multiplier"),
+        "scenario": "the_problem",
+    }
 
-    return Engine(surface, scenario)
+    # Instead of using instance as a disposable...
+    # Manually call the disposable bits in the fixture setup and teardown.
+    instance = Instance(config)
+    instance.__enter__()
+    yield instance
+    instance.__exit__(None, None, None)
 
 
-@pytest.mark.usefixtures("init_pygame")
-def test_the_problem(engine: Engine) -> None:
-    turns = 15
+def test_the_problem(instance) -> None:
+    slow_down = env.bool("slow_down")
+
     coin = Coin()
     die_a = Die()
     die_b = Die()
 
     rook_initial_location = (7, 7)  # The bishop starts here per the scenario terms.
     bishop_terminal_location = (5, 2)  # The bishop does not move.
-
     rook_current_location = rook_initial_location
+
     rook_has_been_executed = False
+
+    turns = 15
     for turn_index in range(turns):
         nth_turn = turn_index + 1
         logger.info("turn %s", nth_turn)
+        __render_board(instance, slow_down)
+
         face, dice_value = __get_coin_and_dice_values(coin, die_a, die_b)
 
         rook_destination_location = __get_rook_desination_location(
@@ -126,3 +142,13 @@ def __get_rook_desination_location(
 
 def __can_rook_be_executed(rook_current_location, bishop_current_location) -> bool:
     return False
+
+
+def __render_board(instance: Instance, slow_down=False) -> None:
+    instance.engine.update()
+    instance.engine.draw()
+    pygame.display.flip()
+
+    if slow_down:
+        one_second = 1
+        time.sleep(one_second)
