@@ -1,5 +1,5 @@
 import pytest
-from chess.components import PieceFactory
+from chess.components.pieces import PieceFactory
 from chess.components.pieces.bishop import Bishop
 from chess.exceptions import PieceNotFoundError
 

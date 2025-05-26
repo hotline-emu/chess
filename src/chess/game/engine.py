@@ -3,7 +3,7 @@ from pygame import Surface
 from pygame.font import Font
 from pygame.event import Event
 from chess.components import Board
-from chess.components.pieces import AbstractPiece
+from chess.components.pieces.abstract_piece import AbstractPiece
 
 
 class Engine:

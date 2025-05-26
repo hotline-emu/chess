@@ -1,7 +1,5 @@
-from chess.components.pieces import (
-    AbstractPiece,
-    Bishop,
-)
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import Bishop
 
 
 def test_bishop() -> None:

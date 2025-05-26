@@ -1,7 +1,5 @@
-from chess.components.pieces import (
-    AbstractPiece,
-    Knight,
-)
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import Knight
 
 
 def test_knight() -> None:

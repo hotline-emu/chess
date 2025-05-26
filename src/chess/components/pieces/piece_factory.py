@@ -1,6 +1,6 @@
 from chess.exceptions import PieceNotFoundError
-from .pieces import (
-    AbstractPiece,
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import (
     Bishop,
     King,
     Knight,
@@ -26,6 +26,4 @@ class PieceFactory:
         if piece_class is None:
             raise PieceNotFoundError(kind)
 
-        # Lint disabled for the below line because MyPy will never believe that abstract properties are defined
-        # with respect to the return type being the "abstraction" and not a long list of concrete objects.
-        return piece_class(color)  # type: ignore[abstract]
+        return piece_class(color)

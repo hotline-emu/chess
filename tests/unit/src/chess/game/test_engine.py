@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 import pygame
 from chess.game.engine import Engine
-from chess.components.pieces import AbstractPiece
+from chess.components.pieces.abstract_piece import AbstractPiece
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 from typing import Any
-from chess.components import PieceFactory
-from chess.components.pieces import AbstractPiece, Rook, Bishop
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import Rook, Bishop, PieceFactory
 
 BLACK = AbstractPiece.BLACK
 WHITE = AbstractPiece.WHITE

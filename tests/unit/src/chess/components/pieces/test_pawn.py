@@ -1,7 +1,5 @@
-from chess.components.pieces import (
-    AbstractPiece,
-    Pawn,
-)
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import Pawn
 
 
 def test_pawn() -> None:

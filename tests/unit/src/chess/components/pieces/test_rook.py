@@ -1,7 +1,5 @@
-from chess.components.pieces import (
-    AbstractPiece,
-    Rook,
-)
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import Rook
 
 
 def test_rook() -> None:

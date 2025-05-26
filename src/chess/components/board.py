@@ -2,16 +2,8 @@ from typing import Any
 import pygame
 from environs import env
 from pygame import Surface
-from chess.components import PieceFactory
-from chess.components.pieces import (
-    AbstractPiece,
-    Bishop,
-    King,
-    Knight,
-    Pawn,
-    Queen,
-    Rook,
-)
+from chess.components.pieces.abstract_piece import AbstractPiece
+from chess.components.pieces import Bishop, King, Knight, Pawn, Queen, Rook, PieceFactory
 from chess.game.scenario import ScenarioFactory
 
 
