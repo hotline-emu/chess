@@ -36,9 +36,7 @@ def test_can_bishop_capture_rook(engine: Engine) -> None:
             engine.board.tile_size * rook_rank_mouse_position + 1,
         ),
     ):
-        with patch.object(
-            engine, "_Engine__show_illegal_move_message"
-        ) as patched_show_illegal_move_message:
+        with patch.object(engine, "_Engine__show_illegal_move_message") as patched_show_illegal_move_message:
             event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
             engine.handle_event(event)
             patched_show_illegal_move_message.assert_not_called()  # Because the move is legal.
@@ -66,9 +64,7 @@ def test_can_rook_capture_bishop(engine: Engine) -> None:
             engine.board.tile_size * bishop_rank_mouse_position + 1,
         ),
     ):
-        with patch.object(
-            engine, "_Engine__show_illegal_move_message"
-        ) as patched_show_illegal_move_message:
+        with patch.object(engine, "_Engine__show_illegal_move_message") as patched_show_illegal_move_message:
             event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1)
             engine.handle_event(event)
             patched_show_illegal_move_message.assert_called_once()  # Because the move is illegal.

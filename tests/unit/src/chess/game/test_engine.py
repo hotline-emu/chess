@@ -102,11 +102,7 @@ def test_handle_event_triggers_illegal_move_message(
     mocked_piece = MagicMock(spec=AbstractPiece)
     mocked_piece.is_legal_move.return_value = False
 
-    engine.board.get_piece = MagicMock(
-        side_effect=lambda position: (
-            mocked_piece if position == initial_position else None
-        )
-    )
+    engine.board.get_piece = MagicMock(side_effect=lambda position: (mocked_piece if position == initial_position else None))
 
     # Force the engine to believe that a piece was selected already.
     engine.selected_position = initial_position
@@ -117,9 +113,7 @@ def test_handle_event_triggers_illegal_move_message(
 
     mock_update.assert_called_once()
     mock_wait.assert_called_once_with(1000)
-    mocked_piece.is_legal_move.assert_called_once_with(
-        initial_position, intended_target_position
-    )
+    mocked_piece.is_legal_move.assert_called_once_with(initial_position, intended_target_position)
 
     # Ensure that the selected piece was deselected.
     assert engine.selected_position == None

@@ -94,10 +94,7 @@ class Board:
         black = AbstractPiece.BLACK
         white = AbstractPiece.WHITE
 
-        grid = [  # Initialize everything to None.
-            [None for _ in range(self.rank_and_file_count)]
-            for _ in range(self.rank_and_file_count)
-        ]
+        grid = [[None for _ in range(self.rank_and_file_count)] for _ in range(self.rank_and_file_count)]  # Initialize everything to None.
 
         # Initialize the pawn ranks.
         for file_index in range(self.rank_and_file_count):

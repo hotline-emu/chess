@@ -49,23 +49,16 @@ def test_draw() -> None:
         assert patched_draw_rect.call_count == 65
 
         # Assert that the call to set the border color to board.select_color exists.
-        call_exists = any(
-            call.kwargs.get("color") == board.selected_border_color
-            for call in patched_draw_rect.call_args_list
-        )
+        call_exists = any(call.kwargs.get("color") == board.selected_border_color for call in patched_draw_rect.call_args_list)
         assert call_exists
 
 
 @pytest.mark.usefixtures("init_pygame")
 def test_draw_with_scenario() -> None:
-    with patch(
-        "chess.game.scenario.scenario_factory.ScenarioFactory.get"
-    ) as patched_scenario_get:
+    with patch("chess.game.scenario.scenario_factory.ScenarioFactory.get") as patched_scenario_get:
         scenario = "the_setup"
         Board(scenario=scenario)
 
         call_args_list = patched_scenario_get.call_args_list
-        call_exists = any(
-            call.kwargs.get("scenario") == scenario for call in call_args_list
-        )
+        call_exists = any(call.kwargs.get("scenario") == scenario for call in call_args_list)
         assert call_exists

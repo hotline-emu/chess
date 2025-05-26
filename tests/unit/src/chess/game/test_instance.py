@@ -63,9 +63,7 @@ def test_run_processes_events_and_calls_engine(test_config: dict[str, int]) -> N
                         with Instance(test_config) as instance:
                             instance.run()
 
-                        patched_clock.return_value.tick.assert_called_once_with(
-                            test_config["framerate"]
-                        )
+                        patched_clock.return_value.tick.assert_called_once_with(test_config["framerate"])
                         engine_mock.handle_event.assert_called_once_with(mock_event)
                         engine_mock.update.assert_called_once()
                         engine_mock.draw.assert_called_once()

@@ -37,9 +37,7 @@ def test(context: Context) -> None:
 
 @task
 def coverage(context: Context) -> None:
-    context.run(
-        "poetry run pytest --cov=src --cov-report=html --cov-report=term-missing"
-    )
+    context.run("poetry run pytest --cov=src --cov-report=html --cov-report=term-missing")
 
 
 @task
@@ -49,4 +47,4 @@ def build(context: Context) -> None:
 
 @task
 def integration(context: Context) -> None:
-        context.run(f"poetry run pytest tests/integration")
+    context.run("poetry run pytest tests/integration")

@@ -16,9 +16,7 @@ class Rook(AbstractPiece):
         initial_rank, initial_file = initial_position
         target_rank, target_file = target_position
 
-        file_and_rank_both_changed = (
-            initial_file != target_file and initial_rank != target_rank
-        )
+        file_and_rank_both_changed = initial_file != target_file and initial_rank != target_rank
         if file_and_rank_both_changed:
             # Must move in a straight line.
             # Both cannot have changed.
