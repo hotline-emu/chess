@@ -26,4 +26,6 @@ jobs:
         run: poetry install
 
       - name: Run pylint via Poetry
-        run: poetry run pylint .
+        run: |
+          cp .env.example .env
+          poetry run pylint .
