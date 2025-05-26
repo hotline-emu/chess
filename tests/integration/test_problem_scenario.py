@@ -51,7 +51,7 @@ def test_the_problem(instance) -> None:
     turns = 15
     for turn_index in range(turns):
         nth_turn = turn_index + 1  # Increment so that the log doesn't start from zero.
-        logger.info("turn %s", nth_turn)
+        logger.info("Turn %s.", nth_turn)
         render_board(instance, SLOW_DOWN)
 
         face, dice_value = __get_coin_and_dice_values(coin, die_a, die_b)
@@ -95,21 +95,15 @@ def test_the_problem(instance) -> None:
             break
 
     winner = "bishop" if rook_can_be_executed else "rook"
-    logger.info("The %s has won", winner)
+    logger.info("The %s has won.", winner)
 
 
 def __get_coin_and_dice_values(coin: Coin, die_a: Die, die_b: Die) -> tuple[str, int]:
     face = coin.flip()
-    logger.info("coin flip resulted in %s", face)
     value_a = die_a.roll()
     value_b = die_b.roll()
     dice_value = value_a + value_b
-    logger.info(
-        "dice total %s (from %s and %s)",
-        dice_value,
-        value_a,
-        value_b,
-    )
+    logger.info("Coin: %s | Dice: %s (%s + %s)", face, dice_value, value_a, value_b)
 
     return (
         face,
@@ -125,21 +119,21 @@ def __get_rook_desination_location(
     current_rank, current_file = current_location
 
     if face == HEADS:
-        logger.info("the rook is moving right %s spaces", dice_value)
+        logger.debug("The rook is moving right %s spaces.", dice_value)
         # rook moves up <dice_value> spaces
         # if rook exceeds the board top, they show back up on the bottom.
         # rightmost space is index 7 -> back to 0
         rightmost_file_index = 7
         target_file_index = current_file + dice_value
         while target_file_index > rightmost_file_index:
-            logger.info("rook went off the board, moving to the first file")
+            logger.debug("The rook went off the board, moving to the first file.")
             target_file_index -= 8
 
         destination_rank = current_rank
         destination_file = target_file_index
         destination_location = (destination_rank, destination_file)
         logger.info(
-            "rook moving from %s to %s",
+            "The rook is moving from %s to %s.",
             decipher_location_to_chess_coordinates(current_location),
             decipher_location_to_chess_coordinates(destination_location),
         )
@@ -147,22 +141,25 @@ def __get_rook_desination_location(
         return destination_location
 
     # Face must logically be tails here.
-    logger.info("the rook is moving up %s spaces", dice_value)
+    logger.debug("The rook is moving up %s spaces.", dice_value)
     # rook moves right <dice_value> spaces
     # if rook exceeds the right edge, they show back up on the left edge.
     # topmost space is index 0 -> back to 7
     topmost_rank_index = 0
     target_rank_index = current_rank - dice_value
     while target_rank_index < topmost_rank_index:
-        logger.info("rook went off the board, moving to the first rank")
+        logger.debug("The rook went off the board, moving to the first rank.")
         target_rank_index += 8
 
     destination_rank = target_rank_index
     destination_file = current_file
-    return (
-        destination_rank,
-        destination_file,
+    destination_location = (destination_rank, destination_file)
+    logger.info(
+        "The rook is moving from %s to %s.",
+        decipher_location_to_chess_coordinates(current_location),
+        decipher_location_to_chess_coordinates(destination_location),
     )
+    return destination_location
 
 
 def __can_rook_be_executed(
@@ -173,7 +170,7 @@ def __can_rook_be_executed(
     execution_is_possible = bishop.is_legal_move(bishop_location, rook_location)
 
     if execution_is_possible:
-        logger.info("The rook has moved into a position where the bishop can legally move.")
+        logger.info("The rook has moved into a position where the bishop can legally execute it.")
 
     return execution_is_possible
 
