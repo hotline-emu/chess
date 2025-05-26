@@ -25,7 +25,7 @@ FILE_MAP = {
 }
 
 
-def render_board(instance: Instance, slow_down=False) -> None:
+def render_board(instance: Instance, slow_down: bool = False) -> None:
     instance.engine.update()
     instance.engine.draw()
     pygame.display.flip()

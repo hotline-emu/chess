@@ -5,4 +5,5 @@
   "reportReturnType": "none",
   "reportIncompatibleMethodOverride": "none",
   "reportAssignmentType": "none",
+  "reportPossiblyUnboundVariable": "none"
 }

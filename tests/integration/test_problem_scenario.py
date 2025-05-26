@@ -1,4 +1,5 @@
 import logging
+from typing import Generator
 import pytest
 from environs import Env
 from chess.game.instance import Instance
@@ -20,7 +21,7 @@ ROOK_IS_ALLOWED_TO_WIN_BY_EXECUTION = env.bool("rook_is_allowed_to_win_by_execut
 
 
 @pytest.fixture
-def instance():
+def instance() -> Generator[Instance]:
     config = {
         "tile_size": env.int("tile_size"),
         "framerate": env.int("framerate"),
@@ -37,7 +38,7 @@ def instance():
     test_instance.__exit__(None, None, None)
 
 
-def test_the_problem(instance) -> None:
+def test_the_problem(instance: Instance) -> None:
     coin = Coin()
     die_a = Die()
     die_b = Die()
@@ -176,7 +177,7 @@ def __can_rook_be_executed(
     return execution_is_possible
 
 
-def ensure_rook_is_present_at_coordinate(test_instance: Instance, coordinate: tuple[int, int]):
+def ensure_rook_is_present_at_coordinate(test_instance: Instance, coordinate: tuple[int, int]) -> None:
     rook_instance: AbstractPiece = test_instance.engine.board.get_piece(coordinate)
     if not isinstance(rook_instance, Rook):
         message = "Bug detected with Rook movement logic. See logs."
@@ -189,7 +190,7 @@ def move_piece_and_render_board(
     test_instance: Instance,
     rook_current_location: tuple[int, int],
     rook_destination_location: tuple[int, int],
-):
+) -> None:
     destination_is_not_the_current_space = rook_current_location != rook_destination_location
     if destination_is_not_the_current_space:
         test_instance.engine.board.move_piece(
@@ -206,8 +207,7 @@ def reroll_for_new_destination(
     die_b: Die,
     rook_current_location: tuple[int, int],
     bishop_terminal_location: tuple[int, int],
-):
-    rerolled_rook_destination_location = None
+) -> tuple[int, int]:
     while rook_destination_is_bishop_location:
         face, dice_value = __get_coin_and_dice_values(coin, die_a, die_b)
         rerolled_rook_destination_location = __get_rook_desination_location(

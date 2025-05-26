@@ -11,8 +11,9 @@ class Coin:
     ]
 
     def __init__(self) -> None:
-        self.side = None
+        self.side: str | None = None
 
     def flip(self) -> str:
-        self.side = choice(self.SIDES)
-        return self.side
+        flipped_result = choice(self.SIDES)
+        self.side = flipped_result
+        return flipped_result
