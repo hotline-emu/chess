@@ -22,7 +22,7 @@ def problem_scenario() -> list[list[Any]]:
     grid = [[None for _ in range(8)] for _ in range(8)]  # Initialize everything to None.
 
     # Initialize the scenario pieces.
-    grid[5][2] = PieceFactory.create(Bishop.lookup_name, BLACK)
-    grid[7][7] = PieceFactory.create(Rook.lookup_name, WHITE)
+    grid[7][7] = PieceFactory.create(Rook.lookup_name, BLACK)
+    grid[5][2] = PieceFactory.create(Bishop.lookup_name, WHITE)
 
     return grid
