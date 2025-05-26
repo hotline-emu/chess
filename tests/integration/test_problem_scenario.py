@@ -1,5 +1,6 @@
 import logging
 import pytest
+from environs import Env
 from chess.game.instance import Instance
 from chess.components.pieces import AbstractPiece, Rook, Bishop
 from tests.integration.utilities import Coin, Die
@@ -8,7 +9,6 @@ from tests.integration.utilities.game_helpers import (
     render_board,
     decipher_location_to_chess_coordinates,
 )
-from environs import Env
 
 env = Env()
 env.read_env()
@@ -30,10 +30,11 @@ def instance():
 
     # Instead of using instance as a disposable...
     # Manually call the disposable bits in the fixture setup and teardown.
-    instance = Instance(config)
-    instance.__enter__()
-    yield instance
-    instance.__exit__(None, None, None)
+    test_instance = Instance(config)
+    # Disabling lint on dunder call, this is a perfectly fine practice for a testing situation.
+    test_instance.__enter__()  # pylint: disable=unnecessary-dunder-call
+    yield test_instance
+    test_instance.__exit__(None, None, None)
 
 
 def test_the_problem(instance) -> None:
@@ -71,17 +72,17 @@ def test_the_problem(instance) -> None:
             if ROOK_IS_ALLOWED_TO_WIN_BY_EXECUTION:
                 logger.info("The rook has moved into a position where it will execute the bishop.")
                 break
-            else:
-                # Re-flip coin and re-roll dice.
-                logger.info("The rook would execute the bishop under these conditions, re-rolling turn.")
-                rook_destination_location = reroll_for_new_destination(
-                    rook_destination_is_bishop_location,
-                    coin,
-                    die_a,
-                    die_b,
-                    rook_current_location,
-                    bishop_terminal_location,
-                )
+
+            # Re-flip coin and re-roll dice.
+            logger.info("The rook would execute the bishop under these conditions, re-rolling turn.")
+            rook_destination_location = reroll_for_new_destination(
+                rook_destination_is_bishop_location,
+                coin,
+                die_a,
+                die_b,
+                rook_current_location,
+                bishop_terminal_location,
+            )
 
         move_piece_and_render_board(instance, rook_current_location, rook_destination_location)
         rook_current_location = rook_destination_location
@@ -175,26 +176,27 @@ def __can_rook_be_executed(
     return execution_is_possible
 
 
-def ensure_rook_is_present_at_coordinate(instance: Instance, coordinate: tuple[int, int]):
-    rook_instance: AbstractPiece = instance.engine.board.get_piece(coordinate)
+def ensure_rook_is_present_at_coordinate(test_instance: Instance, coordinate: tuple[int, int]):
+    rook_instance: AbstractPiece = test_instance.engine.board.get_piece(coordinate)
     if not isinstance(rook_instance, Rook):
         message = "Bug detected with Rook movement logic. See logs."
         logger.error(message)
-        raise Exception(message)
+        # Disabling lint, I'm not writing a custom exception for a debugging case.
+        raise Exception(message)  # pylint: disable=broad-exception-raised
 
 
 def move_piece_and_render_board(
-    instance: Instance,
+    test_instance: Instance,
     rook_current_location: tuple[int, int],
     rook_destination_location: tuple[int, int],
 ):
     destination_is_not_the_current_space = rook_current_location != rook_destination_location
     if destination_is_not_the_current_space:
-        instance.engine.board.move_piece(
+        test_instance.engine.board.move_piece(
             rook_current_location,
             rook_destination_location,
         )
-    render_board(instance)
+    render_board(test_instance)
 
 
 def reroll_for_new_destination(

@@ -116,4 +116,4 @@ def test_handle_event_triggers_illegal_move_message(
     mocked_piece.is_legal_move.assert_called_once_with(initial_position, intended_target_position)
 
     # Ensure that the selected piece was deselected.
-    assert engine.selected_position == None
+    assert engine.selected_position is None
