@@ -1,0 +1,5 @@
+flake8:
+  stage: flake8
+  extends: .default_python_job
+  script:
+    - poetry run flake8 .

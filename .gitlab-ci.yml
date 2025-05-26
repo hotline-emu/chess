@@ -1,0 +1,12 @@
+include:
+  - local: ".gitlab/ci/defaults.yml"
+  - local: ".gitlab/ci/stages/flake8.yml"
+  - local: ".gitlab/ci/stages/mypy.yml"
+  - local: ".gitlab/ci/stages/pylint.yml"
+  - local: ".gitlab/ci/stages/pytest.yml"
+
+stages:
+  - flake8
+  - pylint
+  - mypy
+  - pytest

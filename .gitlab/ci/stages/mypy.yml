@@ -1,0 +1,5 @@
+mypy:
+  stage: mypy
+  extends: .default_python_job
+  script:
+    - poetry run mypy .
