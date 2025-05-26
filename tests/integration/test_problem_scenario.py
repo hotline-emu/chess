@@ -1,17 +1,22 @@
 import logging
 import pytest
-import pygame
-import time
 from chess.game.instance import Instance
 from chess.components.pieces import AbstractPiece, Rook, Bishop
 from tests.integration.utilities import Coin, Die
 from tests.integration.utilities.coin import HEADS
+from tests.integration.utilities.game_helpers import (
+    render_board,
+    decipher_location_to_chess_coordinates,
+)
 from environs import Env
 
 env = Env()
 env.read_env()
 
 logger = logging.getLogger(__name__)
+
+SLOW_DOWN = env.bool("slow_down")
+ROOK_IS_ALLOWED_TO_WIN_BY_EXECUTION = env.bool("rook_is_allowed_to_win_by_execution")
 
 
 @pytest.fixture
@@ -32,28 +37,22 @@ def instance():
 
 
 def test_the_problem(instance) -> None:
-    slow_down = env.bool("slow_down")
-    rook_is_allowed_to_win_by_execution = env.bool(
-        "rook_is_allowed_to_win_by_execution"
-    )
-
     coin = Coin()
     die_a = Die()
     die_b = Die()
 
-    rook_initial_location = (7, 7)  # The bishop starts here per the scenario terms.
+    rook_initial_location = (7, 7)  # The rook starts here per the scenario terms.
     rook_current_location = rook_initial_location
 
     bishop_terminal_location = (5, 2)  # The bishop does not move.
     bishop_actual: Bishop = instance.engine.board.get_piece(bishop_terminal_location)
 
     rook_can_be_executed = False
-
     turns = 15
     for turn_index in range(turns):
-        nth_turn = turn_index + 1
+        nth_turn = turn_index + 1  # Increment so that the log doesn't start from zero.
         logger.info("turn %s", nth_turn)
-        __render_board(instance, slow_down)
+        render_board(instance, SLOW_DOWN)
 
         face, dice_value = __get_coin_and_dice_values(coin, die_a, die_b)
 
@@ -63,55 +62,28 @@ def test_the_problem(instance) -> None:
             rook_current_location,
         )
 
-        rook_actual: AbstractPiece = instance.engine.board.get_piece(
-            rook_current_location
-        )
-        if not isinstance(rook_actual, Rook):
-            message = "Bug detected with Rook movement logic. See logs."
-            logger.error(message)
-            raise Exception(message)
+        ensure_rook_is_present_at_coordinate(instance, rook_current_location)
 
         # There is nothing in the scenario indicating what to do if the rook takes the bishop.
-        rook_destination_is_bishop_location = (
-            rook_destination_location == bishop_terminal_location
-        )
+        rook_destination_is_bishop_location = rook_destination_location == bishop_terminal_location
         if rook_destination_is_bishop_location:
-            # Program two possible scenarios for this case.
-            if rook_is_allowed_to_win_by_execution:
-                logger.info(
-                    "The rook has moved into a position where it will execute the bishop."
-                )
+            # Program two possible outcomes for this case.
+            if ROOK_IS_ALLOWED_TO_WIN_BY_EXECUTION:
+                logger.info("The rook has moved into a position where it will execute the bishop.")
                 break
             else:
-                # Re-flip and re-roll.
-                logger.info(
-                    "The rook would execute the bishop under these conditions, re-rolling turn."
+                # Re-flip coin and re-roll dice.
+                logger.info("The rook would execute the bishop under these conditions, re-rolling turn.")
+                rook_destination_location = reroll_for_new_destination(
+                    rook_destination_is_bishop_location,
+                    coin,
+                    die_a,
+                    die_b,
+                    rook_current_location,
+                    bishop_terminal_location,
                 )
-                while rook_destination_is_bishop_location:
-                    face, dice_value = __get_coin_and_dice_values(coin, die_a, die_b)
-                    rook_destination_location = __get_rook_desination_location(
-                        face,
-                        dice_value,
-                        rook_current_location,
-                    )
-                    rook_destination_is_bishop_location = (
-                        rook_destination_location == bishop_terminal_location
-                    )
-                    if rook_destination_is_bishop_location:
-                        logger.info(
-                            "The rook would still execute the bishop under these conditions, re-rolling turn."
-                        )
 
-        # If the rook moves onto itself, it will delete itself under the current engine.
-        destination_is_not_the_current_space = (
-            rook_current_location != rook_destination_location
-        )
-        if destination_is_not_the_current_space:
-            instance.engine.board.move_piece(
-                rook_current_location,
-                rook_destination_location,
-            )
-        __render_board(instance)
+        move_piece_and_render_board(instance, rook_current_location, rook_destination_location)
         rook_current_location = rook_destination_location
 
         rook_can_be_executed = __can_rook_be_executed(
@@ -166,7 +138,11 @@ def __get_rook_desination_location(
         destination_rank = current_rank
         destination_file = target_file_index
         destination_location = (destination_rank, destination_file)
-        logger.info("rook moving from %s to %s", current_location, destination_location)
+        logger.info(
+            "rook moving from %s to %s",
+            decipher_location_to_chess_coordinates(current_location),
+            decipher_location_to_chess_coordinates(destination_location),
+        )
 
         return destination_location
 
@@ -197,18 +173,51 @@ def __can_rook_be_executed(
     execution_is_possible = bishop.is_legal_move(bishop_location, rook_location)
 
     if execution_is_possible:
-        logger.info(
-            "The rook has moved into a position where the bishop can legally move."
-        )
+        logger.info("The rook has moved into a position where the bishop can legally move.")
 
     return execution_is_possible
 
 
-def __render_board(instance: Instance, slow_down=False) -> None:
-    instance.engine.update()
-    instance.engine.draw()
-    pygame.display.flip()
+def ensure_rook_is_present_at_coordinate(instance: Instance, coordinate: tuple[int, int]):
+    rook_instance: AbstractPiece = instance.engine.board.get_piece(coordinate)
+    if not isinstance(rook_instance, Rook):
+        message = "Bug detected with Rook movement logic. See logs."
+        logger.error(message)
+        raise Exception(message)
 
-    if slow_down:
-        one_second = 1
-        time.sleep(one_second)
+
+def move_piece_and_render_board(
+    instance: Instance,
+    rook_current_location: tuple[int, int],
+    rook_destination_location: tuple[int, int],
+):
+    destination_is_not_the_current_space = rook_current_location != rook_destination_location
+    if destination_is_not_the_current_space:
+        instance.engine.board.move_piece(
+            rook_current_location,
+            rook_destination_location,
+        )
+    render_board(instance)
+
+
+def reroll_for_new_destination(
+    rook_destination_is_bishop_location: bool,
+    coin: Coin,
+    die_a: Die,
+    die_b: Die,
+    rook_current_location: tuple[int, int],
+    bishop_terminal_location: tuple[int, int],
+):
+    rerolled_rook_destination_location = None
+    while rook_destination_is_bishop_location:
+        face, dice_value = __get_coin_and_dice_values(coin, die_a, die_b)
+        rerolled_rook_destination_location = __get_rook_desination_location(
+            face,
+            dice_value,
+            rook_current_location,
+        )
+        rook_destination_is_bishop_location = rerolled_rook_destination_location == bishop_terminal_location
+        if rook_destination_is_bishop_location:
+            logger.info("The rook would still execute the bishop under these conditions, re-rolling turn.")
+
+    return rerolled_rook_destination_location
