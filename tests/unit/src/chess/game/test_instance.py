@@ -49,28 +49,30 @@ def test_disposable_exits(test_config: dict[str, int]) -> None:
         patched_quit.assert_called_once()
 
 
-@patch("pygame.display.set_mode", return_value=MagicMock())
-@patch("pygame.event.get")
+@patch("chess.game.instance.Engine")
+@patch("pygame.time.Clock")
 @patch("pygame.display.flip")
+@patch("pygame.event.get")
+@patch("pygame.display.set_mode", return_value=MagicMock())
 def test_run_processes_events_and_calls_engine(
     _display_set_mode,
     patched_event_get,
     patched_display_flip,
+    patched_clock,
+    patched_engine,
     test_config: dict[str, int],
 ) -> None:
-    with patch("pygame.time.Clock") as patched_clock:
-        with patch("chess.game.instance.Engine") as patched_engine:
-            mock_event = pygame.event.Event(pygame.QUIT)
-            patched_event_get.return_value = [mock_event]
-            engine_mock = MagicMock()
-            patched_engine.return_value = engine_mock
+    mock_event = pygame.event.Event(pygame.QUIT)
+    patched_event_get.return_value = [mock_event]
+    engine_mock = MagicMock()
+    patched_engine.return_value = engine_mock
 
-            with Instance(test_config) as instance:
-                instance.run()
+    with Instance(test_config) as instance:
+        instance.run()
 
-            patched_clock.return_value.tick.assert_called_once_with(test_config["framerate"])
-            engine_mock.handle_event.assert_called_once_with(mock_event)
-            engine_mock.update.assert_called_once()
-            engine_mock.draw.assert_called_once()
-            patched_display_flip.assert_called_once()
-            assert instance.is_running is False
+    patched_clock.return_value.tick.assert_called_once_with(test_config["framerate"])
+    engine_mock.handle_event.assert_called_once_with(mock_event)
+    engine_mock.update.assert_called_once()
+    engine_mock.draw.assert_called_once()
+    patched_display_flip.assert_called_once()
+    assert instance.is_running is False
