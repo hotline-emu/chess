@@ -31,8 +31,9 @@ def test_move_piece() -> None:
     assert actual.color == Pawn.BLACK
 
 
+@patch("pygame.draw.rect")
 @pytest.mark.usefixtures("init_pygame")
-def test_draw() -> None:
+def test_draw(patched_draw_rect) -> None:
     board = Board()
 
     rank_and_file_length = 8
@@ -42,15 +43,14 @@ def test_draw() -> None:
     first_black_pawn = (1, 0)
     selected = first_black_pawn
 
-    with patch("pygame.draw.rect") as patched_draw_rect:
-        board.draw(surface, selected)
+    board.draw(surface, selected)
 
-        # 8 ranks * 8 files + Once to render a red border.
-        assert patched_draw_rect.call_count == 65
+    # 8 ranks * 8 files + Once to render a red border.
+    assert patched_draw_rect.call_count == 65
 
-        # Assert that the call to set the border color to board.select_color exists.
-        call_exists = any(call.kwargs.get("color") == board.selected_border_color for call in patched_draw_rect.call_args_list)
-        assert call_exists
+    # Assert that the call to set the border color to board.select_color exists.
+    call_exists = any(call.kwargs.get("color") == board.selected_border_color for call in patched_draw_rect.call_args_list)
+    assert call_exists
 
 
 @pytest.mark.usefixtures("init_pygame")

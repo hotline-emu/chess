@@ -17,36 +17,36 @@ def test_config() -> dict[str, int]:
     }
 
 
-def test_disposable(test_config: dict[str, int]) -> None:
-    with patch("pygame.init") as patched_init:
-        with patch("pygame.display.set_mode") as patched_set_mode:
-            with patch(
-                "chess.game.instance.Engine",
-            ) as patched_engine:
-                display_mock = MagicMock()
-                patched_set_mode.return_value = display_mock
+@patch(
+    "chess.game.instance.Engine",
+)
+@patch("pygame.display.set_mode")
+@patch("pygame.init")
+def test_disposable(patched_init, patched_set_mode, patched_engine, test_config: dict[str, int]) -> None:
+    display_mock = MagicMock()
+    patched_set_mode.return_value = display_mock
 
-                with Instance(test_config) as instance:
-                    tile_size: int = test_config.get("tile_size")
-                    scale_multiplier: int = test_config.get("scale_multiplier")
-                    board_length = tile_size * scale_multiplier
-                    size = (  # This is the asserted parameter name from the signature.
-                        board_length,
-                        board_length,
-                    )
+    with Instance(test_config) as instance:
+        tile_size: int = test_config.get("tile_size")
+        scale_multiplier: int = test_config.get("scale_multiplier")
+        board_length = tile_size * scale_multiplier
+        size = (  # This is the asserted parameter name from the signature.
+            board_length,
+            board_length,
+        )
 
-                    patched_init.assert_called_once()
-                    patched_set_mode.assert_called_once_with(size)
-                    patched_engine.assert_called_once_with(display_mock, None)
-                    assert instance.engine is patched_engine.return_value
-                    assert instance.is_running is True
+        patched_init.assert_called_once()
+        patched_set_mode.assert_called_once_with(size)
+        patched_engine.assert_called_once_with(display_mock, None)
+        assert instance.engine is patched_engine.return_value
+        assert instance.is_running is True
 
 
-def test_disposable_exits(test_config: dict[str, int]) -> None:
-    with patch("pygame.quit") as patched_quit:
-        instance = Instance(test_config)
-        instance.__exit__(None, None, None)
-        patched_quit.assert_called_once()
+@patch("pygame.quit")
+def test_disposable_exits(patched_quit, test_config: dict[str, int]) -> None:
+    instance = Instance(test_config)
+    instance.__exit__(None, None, None)
+    patched_quit.assert_called_once()
 
 
 @patch("chess.game.instance.Engine")
