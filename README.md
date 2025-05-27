@@ -249,7 +249,7 @@ I think that LLMs have a time and a place, and I don't think that anything that 
 
 ##### Materials that were referred to
 
-[Clean Code - someone's blog post](https://blog.codacy.com/what-is-clean-code)
-[Clean Code - the actual book](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
-[Clean Architecture - compliments Clean Code](https://www.oreilly.com/library/view/clean-architecture-a/9780134494272/)
-[Object Calisthenics - very much a take the meat and leave the stew blog post](https://williamdurand.fr/2013/06/03/object-calisthenics/)
+[Clean Code - someone's blog post](https://blog.codacy.com/what-is-clean-code)  
+[Clean Code - the actual book](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)  
+[Clean Architecture - compliments Clean Code](https://www.oreilly.com/library/view/clean-architecture-a/9780134494272/)  
+[Object Calisthenics - very much a take the meat and leave the stew blog post](https://williamdurand.fr/2013/06/03/object-calisthenics/)  
