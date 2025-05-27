@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import pytest
 import pygame
 from chess.components import Board
@@ -33,7 +33,7 @@ def test_move_piece() -> None:
 
 @patch("pygame.draw.rect")
 @pytest.mark.usefixtures("init_pygame")
-def test_draw(patched_draw_rect) -> None:
+def test_draw(patched_draw_rect: MagicMock) -> None:
     board = Board()
 
     rank_and_file_length = 8
